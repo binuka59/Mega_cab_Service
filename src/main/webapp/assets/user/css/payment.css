@@ -1,0 +1,100 @@
+.container-fluid .display
+{
+    font-size: 5rem;
+     margin-top:12rem;
+    padding-bottom: 2rem;
+}
+
+  .payment_section {
+      position: relative;
+      padding-top:25px;
+    }
+
+ .payment_section .detail-box {
+
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
+      margin-top:5px;
+      padding: 40px 10px;
+      background-color:lightgoldenrodyellow;
+      border:2px solid black;
+      border-radius:1rem;
+      color:black;
+      text-align:center;
+    }
+
+
+.payment_section .box .detail-box h3 {
+      font-family: "Times New Roman", Times, serif;
+      font-size:2rem;
+      font-weight:bold;
+      color:black;
+      margin: 0;
+      margin-bottom:2rem;
+      padding-left:2rem;
+    }
+
+
+.payment_section .box .detail-box .enter {
+      font-family: 'Dancing Script', cursive;
+      margin: 10px 0;
+      font-size:1.4rem;
+    }
+
+.payment_section .box .detail-box h6 span {
+      font-size: 1.5rem;
+      font-weight: bold;
+      padding-left:5rem;
+    }
+
+
+
+
+.payment_section .box:hover .img-box img {
+      -webkit-transform: scale(1.1);
+              transform: scale(1.1);
+    }
+ @media (max-width: 991px) {
+
+
+.payment_section .box .img-box {
+       width: 100px;
+       padding-top:1rem;
+
+
+     }
+
+     .payment_section .box .detail-box h6 span {
+
+       font-size:1.5rem;
+
+     }
+     .payment_section .box .detail-box h6 .enter {
+
+        font-size:1rem;
+
+      }
+      .payment_section .box .detail-box .bookbtn {
+
+          font-size:18px;
+
+          margin-left:5rem;
+
+
+          }
+          .container  .swipers .swiper-slide
+          {
+          background-color:green;
+
+          }
+    }
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,86 @@
+.ftco-section
+{
+ border:2px solid black;
+ border-radius:1rem;
+ margin :5rem 3rem 5rem 3rem;
+ padding:10px 10px;
+ box-shadow: 0 14px 20px rgba(9, 9, 9, 0.9);
+}
+
+.ftco-section .table thead
+{
+color:black;
+font-weigh:bold;
+text-align:center;
+font-size:18px;
+border-radius:1rem;
+font-family: Georgia, serif;
+}
+.ftco-section .table .colspan
+{
+color:black;
+font-weigh:bold;
+text-align:center;
+font-size:18px;
+
+}
+
+.ftco-section .table tbody
+{
+color:gray;
+font-weigh:bold;
+text-align:center;
+font-size:18px;
+
+}
+
+.ftco-section .table .btn a
+{
+color:white;
+font-size:15px;
+font-weigh:bold;
+text-align:center;
+border:2px solid white;
+border-radius:.5rem;
+margin-left:1rem;
+box-shadow: 0 14px 20px rgba(9, 9, 9, 0.9);
+}
+
+.ftco-section .table .btn-info:hover
+{
+color:black;
+font-size:16px;
+border:3px solid lightblue;
+background:white;
+}
+
+.ftco-section .table .btn-danger:hover
+{
+color:black;
+font-size:16px;
+border:3px solid #dc3545;
+background:white;
+}
+
+.ftco-section .table .img
+{
+
+background:red;
+}
+@media(max-width:992px)
+{
+    .ftco-section .table thead
+    {
+
+    text-align:center;
+    font-size:15px;
+
+    }
+    .ftco-section .table tbody
+    {
+
+    text-align:center;
+    font-size:15px;
+
+    }
+}
