@@ -151,28 +151,29 @@ public class BookingController extends HttpServlet {
 			if (isBooked) {
 				request.setAttribute("errorMessage", "Sorry, this vehicle is already booked on the "+pickdate+" date.");
 			} else {
+				display(request  ,response);
+//				BookingDao.addData(booking);
+//				LoginDao.updateData(login);
+//
+//				LocalDate today = LocalDate.now();
+//				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//				LocalDate selectedDate = LocalDate.parse(pickdate, formatter);
+//				if (selectedDate.equals(today)) {
+//					VehicleDao.updateData(vehicle1);
+//
+//				}
 
-				BookingDao.addData(booking);
-				LoginDao.updateData(login);
 
-				LocalDate today = LocalDate.now();
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-				LocalDate selectedDate = LocalDate.parse(pickdate, formatter);
-				if (selectedDate.equals(today)) {
-					VehicleDao.updateData(vehicle1);
-
-				}
-
-
-				request.setAttribute("Message", "Booking successful!");
 			}
 
 			// Forward to booking page
-			request.getRequestDispatcher("WEB-INF/view/User/booking.jsp").forward(request, response);
+			request.getRequestDispatcher("WEB-INF/view/User/UserHome.jsp").forward(request, response);
 
 		} catch (Exception e) {
 			throw new ServletException("Error processing booking", e);
 		}
 	}
-
-}
+	private void display(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.getRequestDispatcher("WEB-INF/view/User/Showbooking.jsp").forward(request ,response);
+	}
+	}
