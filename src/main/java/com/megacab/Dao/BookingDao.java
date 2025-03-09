@@ -4,14 +4,18 @@ import com.megacab.model.AdminBook;
 import com.megacab.model.Booking;
 //import com.megacab.model.Vehicle;
 
+import java.awt.datatransfer.DataFlavor;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class BookingDao {
 
+
+    private DataFlavor request;
 
     public static void addData(Booking booking) {
         LocalDate today = LocalDate.now();
@@ -164,4 +168,45 @@ public class BookingDao {
         return BookSelect;
 
     }
+
+    public List<Booking> getmybook(Integer userId) {
+        List<Booking> BookList  = new ArrayList<>();
+        LocalDate today = LocalDate.now();  // Get today's date
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+
+        String query1 = "SELECT  v.v_name AS vehicle, " +
+                "B.bid AS bid ,B.pickaddress AS pickaddress, B.dropaddress AS dropaddress, B.picktime AS picktime  , B.pickdate AS pickdate " +
+                "FROM booking B " + "JOIN vehicle v ON B.vid = v.vehicleid " + "JOIN login L ON B.uid = L.id " +
+                "WHERE B.uid = ? AND B.pickdate >= ? " +
+                "ORDER BY B.pickdate ASC";
+
+        try (Connection connection = DbConnectionFactory.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query1)) {
+
+            preparedStatement.setInt(1, userId);  // Set userId
+            preparedStatement.setDate(2, Date.valueOf(today));
+
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String date = resultSet.getString("pickdate");
+                LocalDate pickDate = LocalDate.parse(date, formatter);
+
+                String bid =resultSet.getString("bid");
+//                System.out.println("id ek  is"+bid);
+                String vehicle = resultSet.getString("vehicle");
+                String time = resultSet.getString("picktime");
+                String pickaddress = resultSet.getString("pickaddress");
+                String dropaddress = resultSet.getString("dropaddress");
+
+                BookList.add(new Booking(bid, vehicle,time,pickDate, pickaddress, dropaddress));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return BookList;
+    }
 }
+

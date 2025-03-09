@@ -1,5 +1,6 @@
 package com.megacab.controller;
 
+import com.megacab.Dao.BookingDao;
 import com.megacab.Dao.DbConnectionFactory;
 import com.megacab.Dao.LoginDao;
 import com.megacab.model.Booking;
@@ -37,11 +38,13 @@ public class LoginController extends HttpServlet {
 	private  BookingService bookingService;
 
 
+
 	public void init() throws ServletException {
 		loginService = LoginService.getInstance();
 		vehicleService = VehicleService.getInstance();
 		headerService = HeaderService.getInstance();
 		bookingService = BookingService.getInstance();
+
 	}
 
 
@@ -50,6 +53,7 @@ public class LoginController extends HttpServlet {
      */
     public LoginController() {
         super();
+
         // TODO Auto-generated constructor stub
     }
 
@@ -58,6 +62,7 @@ public class LoginController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
+
 		 if (action.equals("show")) {
 			 showregisterForm(request, response);
 		 }
@@ -67,7 +72,6 @@ public class LoginController extends HttpServlet {
 		 }
 		 else if (action.equals("booking"))
 		 {
-
 			 showbookForm(request, response);
 		 }
 		 else if (action.equals("home"))
@@ -105,6 +109,7 @@ public class LoginController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 		String action = request.getParameter("action");
 
 		if (action.equals("add")) {
@@ -199,6 +204,13 @@ public class LoginController extends HttpServlet {
                 throw new RuntimeException(e);
             }
 		}
+		else if (action.equals("accept")) {
+
+			showhomeForm(request ,response);
+
+
+        }
+
 
 	}	private void displayvehicle(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
@@ -210,7 +222,6 @@ public class LoginController extends HttpServlet {
 	}
 
 	private void showhomeForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 
 			try {
 				List<Vehicle> VehicleList = new ArrayList<>();
@@ -239,6 +250,12 @@ public class LoginController extends HttpServlet {
 
 	private void showbookForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		BookingDao bookingDao = new BookingDao();
+
+		Integer userId = (Integer) request.getSession().getAttribute("userId");
+
+		List<Booking> bookings = bookingDao.getmybook(userId);
+		request.setAttribute("LoginController", bookings);
 		request.getRequestDispatcher("WEB-INF/view/User/booking.jsp").forward(request, response);
 	}
 

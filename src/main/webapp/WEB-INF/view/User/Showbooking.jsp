@@ -19,7 +19,7 @@
 
     <link rel="stylesheet" href="assets/user/css/style.css">
     <link rel="stylesheet" href="assets/user/css/user.css">
-    <link rel="stylesheet" href="assets/admin/css/dashboard.css">
+    <link rel="stylesheet" href="assets/user/css/dashboard.css">
     <link rel="stylesheet" href="assets/admin/css/menu.css">
     <link rel="stylesheet" href="assets/user/css/footer.css">
 
@@ -44,80 +44,64 @@
                     </div>
                 </div>
 
+                    <%
+                        String vehicleprice  = (String) session.getAttribute("vehicleprice");
+                        String vehicleaddition = (String) session.getAttribute("vehicleaddition");
+                        String vehicleestimate = (String) session.getAttribute("vehicleestimate");
+                    %>
+
 
             <div class="top booking">
                 <div class="container-fluid py-6">
 
-                <form action="DriverController?action=update&id=" method="post" enctype="multipart/form-data">
+                <form action="BookingController?action=accept" method="post" >
+                 <input type="hidden" name="userId" value="<%= session.getAttribute("userId") %>">
 
 
                 <div class="container">
                          <div class="row">
-                             <div class="col-md-5 form-group mt-3 mt-md-0">
 
 
-                             </div>
-
-                             <div class="col-md-4 form-group mt-3 mt-md-0">
+                            <div class="col-md-3 form-group mt-3 mt-md-0">
                                 <label>Fee of 1KM</label>
-
-                             </div>
-
-                            <div class="col-md-3 form-group mt-3 mt-md-0">
-                                <input type="text" class="form-control" name="price" id="price" value="RS: " readonly>
+                                <input type="text" class="form-control" value="RS: <%= vehicleprice %>0" readonly>
                                 <div class="validate"></div>
                             </div>
 
-                             <div class="col-md-5 form-group mt-3 mt-md-0">
+                             <div class="col-md-1 form-group mt-3 mt-md-0">
 
                              </div>
 
                              <div class="col-md-4 form-group mt-3 mt-md-0">
-                                <label>Additional  per 1km charge:</label>
+                                <label>Count of Estimated KM:</label>
+                                <input type="text" class="form-control"  value="<%= vehicleestimate %>" readonly>
+                                <div class="validate"></div>
+                             </div>
+
+                             <div class="col-md-1 form-group mt-3 mt-md-0">
 
                              </div>
 
                             <div class="col-md-3 form-group mt-3 mt-md-0">
-                                <input type="text" class="form-control" name="addition" id="addition" value="RS: " readonly>
+                                <label>Fee of Additional 1KM</label>
+                                <input type="text" class="form-control" name="price" id="price" value="RS: <%= vehicleaddition %>0" readonly>
                                 <div class="validate"></div>
                             </div>
 
-                             <div class="col-md-7 form-group mt-3 mt-md-0">
+
+                             <div class="col-md-3 form-group mt-3 mt-md-0">
 
                              </div>
 
-                             <div class="col-md-2 form-group mt-3 mt-md-0">
-                                <label>Total Of KM:</label>
-
-                             </div>
-
-                            <div class="col-md-3 form-group mt-3 mt-md-0">
-                                <input type="text" class="form-control" name="totkm" id="totkm" oninput="calculateAmount()">
-                                <div class="validate"></div>
-                            </div>
-
-                             <div class="col-md-7 form-group mt-3 mt-md-0">
-
-                             </div>
-
-                             <div class="col-md-2 form-group mt-3 mt-md-0">
-                                <label>Amount:</label>
-
-                             </div>
-
-                            <div class="col-md-3 form-group mt-3 mt-md-0">
-                                <input type="text" class="form-control" name="amount" id="amount" readonly>
-                                <div class="validate"></div>
-                            </div>
-
-                            <div class="col-md-12 form-group mt-3 mt-md-0">
-                                <input type="checkbox" class="form-control" >
-                                <label>
+                            <div class="col-md-6 check">
+                                <input type="checkbox" id="termsCheckbox" name="termsCheckbox" value="accepted">
+                                <label for="termsCheckbox">I  Agree  with  Our  Rulls   &&  Regulation.</label>
                             </div>
 
                          </div>
-                             <div class = "col-lg-6 col-md-6 form-group mt-3 mt-md-0">
-                                <button type="submit" class="bookbtn">Update Now</button>
+                             <div  class="col-12 d-flex justify-content-center mt-3">
+
+                                <button type="submit" class="bookbtn" id="updateBtn" disabled>B o o k_N o w </button>
                              </div>
 
                         </form>
@@ -146,6 +130,16 @@
 
                                 document.getElementById("amount").value = "RS: " + amount.toFixed(2);
                             }
+
+                                // Get the checkbox and button elements
+                                const termsCheckbox = document.getElementById("termsCheckbox");
+                                const updateBtn = document.getElementById("updateBtn");
+
+                                // Add an event listener to the checkbox
+                                termsCheckbox.addEventListener("change", function () {
+                                    // Enable the button if checkbox is checked, otherwise disable it
+                                    updateBtn.disabled = !termsCheckbox.checked;
+                                });
                         </script>
 
                     </div>
@@ -173,6 +167,7 @@
                     referrerpolicy="no-referrer-when-downgrade"
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1018.3819746773321!2d80.63310070117343!3d7.290514529817207!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae366266498acd3%3A0x411a3818a1e03c35!2sKandy!5e0!3m2!1sen!2slk!4v1740501085995!5m2!1sen!2slk" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
                   </iframe>
+
 
               </div>
             </div>

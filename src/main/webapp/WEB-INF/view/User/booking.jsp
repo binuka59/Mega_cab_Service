@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@ page import="java.util.List" %>
+<%@ page import="com.megacab.model.Booking" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,7 +8,7 @@
 <title>Mega_Cab_Service</title>
 <link rel="shortcut icon" href="assets/images/cbackground.png">
 
- <link href="assets/images/cab1.png" rel="icon">
+
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
@@ -18,7 +19,8 @@
 
     <link rel="stylesheet" href="assets/user/css/style.css">
     <link rel="stylesheet" href="assets/user/css/user.css">
-    <link rel="stylesheet" href="assets/user/css/bkkk.css">
+    <link rel="stylesheet" href="assets/user/css/dash.css">
+    <link rel="stylesheet" href="assets/admin/css/menu.css">
     <link rel="stylesheet" href="assets/user/css/footer.css">
 
    <link href="assets/user/css/bootstrap.min.css" rel="stylesheet">
@@ -31,7 +33,6 @@
 
 
         <%@ include file="header.jsp"%>
-
                 <div class="container-fluid bg-light  ">
                     <div class="container text-center animated bounceInDown">
                         <h1 class="display">Booking</h1>
@@ -43,12 +44,76 @@
 
                     </div>
                 </div>
+
+                        <section class="ftco-section">
+                            <h1>Book Information</h1>
+                            <div class="container">
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="table-wrap">
+                                            <table class="table table-responsive-xl">
+                                              <thead>
+                                                <tr>
+
+                                                  <th>Book No</th>
+                                                  <th>Vehicle</th>
+                                                  <th>PickTime</th>
+                                                  <th>PickDate</th>
+                                                  <th>Journey</th>
+                                                  <th>Status</th>
+                                                </tr>
+                                              </thead>
+<tbody>
+                                          <%
+                                               List<Booking> BookList = (List<Booking>) request.getAttribute("LoginController");
+                                               if (BookList != null && !BookList.isEmpty()) {
+                                                   for (Booking booking : BookList) {
+                                          %>
+
+                                                <tr class="alert" role="alert">
+
+                                                    <td >MCS00<%=booking.getId()%></td>
+                                                    <td><%=booking.getVehicletype()%></td>
+                                                    <td><%=booking.getPicktime()%></td>
+                                                    <td><%=booking.getPickupdate()%></td>
+                                                    <td><%=booking.getPickaddress()%> - <%=booking.getDropaddress()%></td>
+                                                    <td>
+                                                         <a href="AdminController?action=see" class="btn btn-info">See more</a>
+                                                        <button type="button" class="btn btn-danger">Reject</button>
+                                                    </td>
+                                                </tr>
+                                              <%
+                                                 }
+                                                 } else {
+                                              %>
+                                              <tr>
+                                                  <td colspan="6">No booking data available</td>
+                                              </tr>
+                                              <%
+                                                  }
+                                              %>
+
+                                        </tbody>
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+
+
                     <%
                     Integer Id = (Integer) session.getAttribute("userId");
                     String Username = (String) session.getAttribute("name");
                     String Email = (String) session.getAttribute("email");
                     String Mobile = (String) session.getAttribute("mobile");
                     String Nic = (String) session.getAttribute("nic");
+                    String vehicleprice  = (String) session.getAttribute("vehicleprice");
+                    String vehicleaddition = (String) session.getAttribute("vehicleaddition");
+                    String vehicleestimate = (String) session.getAttribute("vehicleestimate");
 
                     %>
 
@@ -133,8 +198,23 @@
                       <div class="col-md-6 form-group mt-3 mt-md-0">
                         <label>Select Pickup Time :</label>
                          <input type="time" class="form-control" name="time" id="time" placeholder="Pickup time" data-rule="minlen:4" data-msg="Please enter at least 4 chars" required>
+                        <input type="hidden" name="formattedTime" id="formattedTime">
                         <div class="validate"></div>
                       </div>
+
+                        <script>
+                            document.getElementById("time").addEventListener("change", function () {
+                                let timeInput = this.value; // Get the time (HH:mm format)
+                                let formattedTimeInput = document.getElementById("formattedTime");
+
+                                if (timeInput) {
+                                    let [hours, minutes] = timeInput.split(":");
+                                    let ampm = hours >= 12 ? "PM" : "AM";
+                                    hours = hours % 12 || 12; // Convert 0 to 12 for AM
+                                    formattedTimeInput.value = hours + ":" + minutes + " " + ampm;
+                                }
+                            });
+                        </script>
 
                       <div class="col-md-6 form-group mt-3 mt-md-0">
                         <label>Pickup Address:</label>
@@ -145,17 +225,30 @@
                     <div class="col-md-6 form-group mt-3 mt-md-0">
                         <label>Drop off Address:</label>
                         <input type="text" name="dropaddress" class="form-control" id="dropad" placeholder="End Destination" required>
-                        <div class="validate"  style="color:red;></div>
+                        <div class="validate"  style="color:red;"></div>
                     </div>
 
 
 
-                  </div>
+                    </div>
+                             <div  class="col-12 d-flex justify-content-center mt-3">
+
+                                <button type="submit" class="bookbtn" >B o o k_N o w </button>
+                             </div>
+                    <script>
+                                // Get the checkbox and button elements
+                                const termsCheckbox = document.getElementById("termsCheckbox");
+                                const updateBtn = document.getElementById("updateBtn");
+
+                                // Add an event listener to the checkbox
+                                termsCheckbox.addEventListener("change", function () {
+                                    // Enable the button if checkbox is checked, otherwise disable it
+                                    updateBtn.disabled = !termsCheckbox.checked;
+                                });
+                        </script>
+
                 </div>
 
-                <div class="col-12 d-flex justify-content-center mt-3">
-                    <button type="submit" class="bookbtn">N e x t </button>
-                </div>
 
             </form>
 
@@ -260,6 +353,9 @@
             <%@ include file="footer.jsp" %>
                  <script>
                      document.getElementById("year").textContent = new Date().getFullYear();
+
+
+
                  </script>
 
             <script src="assets/user/js/main.js"></script>

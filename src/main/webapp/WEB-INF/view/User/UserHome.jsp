@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
         <%@ page import="java.util.List" %>
         <%@ page import="com.megacab.model.Vehicle" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,7 +22,7 @@
     <link rel="stylesheet" href="assets/user/css/user.css">
     <link rel="stylesheet" href="assets/user/css/style.css">
     <link rel="stylesheet" href="assets/user/css/driver.css">
-<link rel="stylesheet" href="assets/admin/css/menu.css">
+
     <link rel="stylesheet" href="assets/user/css/footer.css">
 
    <link href="assets/user/css/bootstrap.min.css" rel="stylesheet">
@@ -101,51 +102,7 @@
               </div>
             </section>
 
-                         <div class="text-center">
-                             <h1 class="rules-heading py-5">Bookin Information</h1>
-                         </div>
-            <section class="ftco-section">
 
-                    <div class="container">
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="table-wrap">
-                                    <table class="table table-responsive-xl">
-                                      <thead>
-                                        <tr>
-
-                                          <th>Book No</th>
-                                          <th>Vehicle</th>
-                                          <th>PickTime</th>
-                                          <th>PickDate</th>
-                                          <th>Journey</th>
-                                          <th>Status</th>
-                                        </tr>
-                                      </thead>
-                                        <tbody>
-
-                                                <tr class="alert" role="alert">
-
-                                                    <td ></td>
-                                                    <td></td>
-                                                    <td><span class="active"></span></td>
-                                                    <td></span></td>
-                                                    <td class="status"><span class="active"></span></td>
-                                                    <td>
-                                                         <a href="AdminController?action=see" class="btn btn-info">See more</a>
-                                                        <button type="button" class="btn btn-danger">Reject</button>
-                                                    </td>
-                                                </tr>
-
-                                        </tbody>
-
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
 
             <div class="container py-5 wow fadeInUp" data-wow-delay="0.1s">
 
