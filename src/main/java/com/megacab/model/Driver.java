@@ -8,21 +8,48 @@ public class Driver {
    private  String phone;
    private  String email;
    private  String status;
+   private  String filename;
+   private  String vehiclename;
+
+    public Driver(String id, String fileName, String name, String email, String mobile, String nic, String vname) {
+        this.id= Integer.parseInt(id);
+        this.filename=fileName;
+        this.name=name;
+        this.email= email;
+        this.vehiclename=vname;
+        this.phone= mobile;
+        this.nic=nic;
+
+
+    }
+
+
+    public String getVehiclename() {
+        return vehiclename;
+    }
+
+    public void setVehiclename(String vehiclename) {
+        this.vehiclename = vehiclename;
+    }
+
+
 
     public Driver(String fileName) {
         this.filename=fileName;
     }
 
-
-    public String getPassword() {
-        return password;
+    public Driver(Integer id, String image, String name, String nic, String mobile, String vname, String email, String status) {
+        this.id=id;
+        this.filename=image;
+        this.name=name;
+        this.email= email;
+        this.vehiclename=vname;
+        this.phone= mobile;
+        this.nic=nic;
+        this.status=status;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
-    private  String password;
 
 //    getAllDrivers()
     public Driver(Integer id,String image, String name, String nic, String mobile, String email, String status) {
@@ -43,16 +70,13 @@ public class Driver {
         this.nic=nic;
         this.status=status;
     }
-
-    public String getFilename() {
-        return filename;
+    public Driver(String email, String password) {
+        this.email=email;
+        this.password=password;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
 
-    private  String filename;
+
 
 //adddriver
     public Driver(String fileName, String name, String email, String mobile, String nic) {
@@ -62,6 +86,23 @@ public class Driver {
         this.phone= mobile;
         this.nic=nic;
 
+    }
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    private  String password;
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     public String getStatus() {
@@ -114,6 +155,5 @@ public class Driver {
 
 
 
-    public Driver(String email, String password) {
-    }
+
 }

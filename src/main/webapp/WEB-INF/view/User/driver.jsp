@@ -15,11 +15,11 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Playball&display=swap" rel="stylesheet">
-<link rel="shortcut icon" href="assets/images/cbackground.png">
+    <link rel="shortcut icon" href="assets/images/cbackground.png">
     <link rel="stylesheet" href="assets/user/css/style.css">
     <link rel="stylesheet" href="assets/user/css/user.css">
     <link rel="stylesheet" href="assets/user/css/footer.css">
-    <link rel="stylesheet" href="assets/user/css/driver.css">
+    <link rel="stylesheet" href="assets/user/css/dr.css">
 
    <link href="assets/user/css/bootstrap.min.css" rel="stylesheet">
    <link href="assets/user/css/bootstrap-icons.css" rel="stylesheet">
@@ -56,6 +56,7 @@
                                               <h5> <%= driver.getNic() %></h5>
                                               <h5> <%= driver.getPhone() %></h5>
                                               <h5> <%= driver.getEmail() %></h5>
+                                              <h5> <%= driver.getVehiclename()%></h5>
                                           </div>
                                       </div>
                                   </div>

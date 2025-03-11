@@ -47,7 +47,11 @@
               </div>
 
               <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-
+                          <h3 style="color: red;padding-left:8rem;font-size:1.3rem;font-weight:bold;font-family:Georgia, 'Times New Roman', Times, serif;">
+                              <% if (request.getAttribute("errorMessage") != null) { %>
+                                  <%= request.getAttribute("errorMessage") %>
+                              <% } %>
+                          </h3>
                 <form  action="login?action=add" method="post">
 
                 <!-- Name input -->
@@ -63,7 +67,8 @@
                     <label class="form-label" for="form1Example13">Email address</label>
                     <h2 id="email-error" style="color: red;"></h2>
                     <input type="email" id="email" name="email" class="form-control form-control-lg"
-                           placeholder="Enter Email address Here" required>
+                    placeholder="Enter Email address Here" pattern="[a-zA-Z0-9._%+-]+@gmail\.com"
+                     title="Please enter a valid Gmail address (e.g., example@gmail.com)" required>
 
                     <script>
                         document.querySelector("form").addEventListener("submit", function (event) {

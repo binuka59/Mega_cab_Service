@@ -1,10 +1,17 @@
 package com.megacab.controller;
 
 
+import com.megacab.Dao.DbConnectionFactory;
 import com.megacab.Dao.RegisterDao;
 import com.megacab.model.Register;
 import com.megacab.service.RegisterService;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -58,21 +65,44 @@ class RegisterController extends HttpServlet {
 		String password = request.getParameter("password");
 		String email = request.getParameter("email");
 
+		String Query = "SELECT email  FROM login";
 
-		Register register = new Register();
-		register.setName(name);
-		register.setPassword(password);
-		register.setEmail(email);
+		try (Connection connection = DbConnectionFactory.getConnection();
+			 PreparedStatement Stmt = connection.prepareStatement(Query)) {
 
-		RegisterDao.addData(register);
-//		response.sendRedirect("Register?action=list");
-		if (!response.isCommitted()) {
-//			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
-//			dispatcher.forward(request, response);
-		} else {
-			System.out.println("Response already committed!");
+			ResultSet rs = Stmt.executeQuery();
+				while (rs.next())
+				{
+					String dataemail = rs.getString("email");
+					if (dataemail==email)
+					{
+						request.setAttribute("errorMessage", "Email Already Exists. Try another email!");
+						request.getRequestDispatcher("Login?action=show").forward(request, response);
+						return;
+					}
+					else
+					{
+						Register register = new Register();
+						register.setName(name);
+						register.setPassword(password);
+						register.setEmail(email);
+
+						RegisterDao.addData(register);
+
+
+						request.getRequestDispatcher("Login?action=lognow").forward(request, response);
+					}
+
+
+				}
+
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			request.setAttribute("errorMessage", "An error occurred. Please try again.");
+			request.getRequestDispatcher("error.jsp").forward(request, response);
 		}
-
 	}
+
 
 }

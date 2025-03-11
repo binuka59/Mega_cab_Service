@@ -4,6 +4,7 @@ import com.megacab.model.Vehicle;
 
 import java.io.File;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,9 +26,10 @@ public class VehicleDao {
                 String name = resultSet.getString("type");
                 double initial = resultSet.getDouble("initial");
                 double fee = resultSet.getDouble("fee");
+                double driver = resultSet.getDouble("driver");
 
 
-                Vehicle.add(new Vehicle(name,image, initial, fee));
+                Vehicle.add(new Vehicle(name,image, initial, fee,driver));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -38,8 +40,13 @@ public class VehicleDao {
 
     public static List<Vehicle> getAllVehicletype(String vehiclename) {
         List<Vehicle> vehicletype = new ArrayList<>();
-        String query = "SELECT v.v_image, v.v_name, v.v_price,v_addtionalprice , v_estimation, v.status " +
-                "FROM vehicle v " + "JOIN vehicledetail vd ON v.details_id = vd.id " +
+        LocalDate today = LocalDate.now();
+        Date sqlDate = Date.valueOf(today);
+
+        String query = "SELECT v.vehicleid AS id, v.v_image AS image, v.v_name AS name, v.v_price AS price, " +
+                "v.v_addtionalprice AS addition, v.v_estimation AS estimate " +
+                "FROM vehicle v " +
+                "JOIN vehicledetail vd ON v.details_id = vd.id " +
                 "WHERE vd.type = ?";
 
         try (Connection connection = DbConnectionFactory.getConnection();
@@ -49,18 +56,37 @@ public class VehicleDao {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                String fileName = resultSet.getString("v_image");
-                String uploadPath = "assets/user/img/"; // Folder inside web directory
+                String fileName = resultSet.getString("image");
+                String uploadPath = "assets/user/img/";
                 String image = uploadPath + File.separator + fileName;
 
+                Integer id = resultSet.getInt("id");
+                String vname = resultSet.getString("name");
+                double price = resultSet.getDouble("price");
+                String additionalPrice = resultSet.getString("addition");
+                String estimation = resultSet.getString("estimate");
 
-                String vname = resultSet.getString("v_name");
-                double price = resultSet.getDouble("v_price");
-                String addtionalprice = resultSet.getString("v_addtionalprice");
-                String estimation = resultSet.getString("v_estimation");
-                String status = resultSet.getString("status");
+//                String queryCheck = "SELECT pickdate FROM booking WHERE vid = ?";
+                String status = "Allow";
+//
+//                try (PreparedStatement queryStatement = connection.prepareStatement(queryCheck)) {
+//                    queryStatement.setInt(1, id);
+//                    ResultSet rs = queryStatement.executeQuery();
+//
+//                    while (rs.next()) {
+//                        LocalDate bookedDate = rs.getDate("pickdate").toLocalDate();
+//                        if (bookedDate.equals(today)) {
+//                            status = "Booked";
+//                            break;
+//                        }
+//                    }
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
 
-                vehicletype.add(new Vehicle(image,vname, price, addtionalprice ,estimation,status));
+
+
+                vehicletype.add(new Vehicle(id, image, vname, price, additionalPrice, estimation, status));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -230,6 +256,31 @@ public class VehicleDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void cancelbook(Vehicle vehicle1) {
+        String query = "UPDATE booking SET status=? WHERE bid=?";
+
+        Integer cancelid = vehicle1.getId();
+        System.out.println("Inside cancelbook, vehicle ID: " + cancelid);
+
+        try (Connection connection = DbConnectionFactory.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, vehicle1.getStatus());
+            statement.setInt(2, cancelid);
+
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Booking canceled successfully for vehicle ID: " + cancelid);
+            } else {
+                System.out.println("No booking found for vehicle ID: " + cancelid);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error canceling booking: " + e.getMessage());
         }
     }
 

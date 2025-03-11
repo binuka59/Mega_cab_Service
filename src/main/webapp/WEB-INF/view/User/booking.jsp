@@ -64,7 +64,7 @@
                                                   <th>Status</th>
                                                 </tr>
                                               </thead>
-<tbody>
+                                        <tbody>
                                           <%
                                                List<Booking> BookList = (List<Booking>) request.getAttribute("LoginController");
                                                if (BookList != null && !BookList.isEmpty()) {
@@ -79,8 +79,9 @@
                                                     <td><%=booking.getPickupdate()%></td>
                                                     <td><%=booking.getPickaddress()%> - <%=booking.getDropaddress()%></td>
                                                     <td>
-                                                         <a href="AdminController?action=see" class="btn btn-info">See more</a>
-                                                        <button type="button" class="btn btn-danger">Reject</button>
+
+                                                        <a href="BookingController?action=cancel&cancelid=<%=booking.getId()%>" class="btn btn-danger">Cancel</a>
+                                                        <a href="PaymentController?action=pay&payid=<%=booking.getId()%>" class="btn btn-primary">Pay</a>
                                                     </td>
                                                 </tr>
                                               <%
@@ -105,156 +106,6 @@
 
 
 
-                    <%
-                    Integer Id = (Integer) session.getAttribute("userId");
-                    String Username = (String) session.getAttribute("name");
-                    String Email = (String) session.getAttribute("email");
-                    String Mobile = (String) session.getAttribute("mobile");
-                    String Nic = (String) session.getAttribute("nic");
-                    String vehicleprice  = (String) session.getAttribute("vehicleprice");
-                    String vehicleaddition = (String) session.getAttribute("vehicleaddition");
-                    String vehicleestimate = (String) session.getAttribute("vehicleestimate");
-
-                    %>
-
-      <div class="top booking">
-        <div class="container-fluid py-6">
-
-            <form action="BookingController?action=add" method="post">
-                <div class="container ">
-                  <div class="row ">
-
-                    <input type="hidden" name="id" value="<%= Id %>">
-
-                     <div class="col-md-6 form-group ">
-                        <label>Your Name :</label>
-                        <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" value="<%= Username != null ? Username : "" %>" data-rule="minlen:4" data-msg="Please enter at least 4 chars" required>
-                          <div class="validate""></div>
-                     </div>
-
-
-                     <div class="col-md-6 form-group mt-3 mt-md-0 ">
-                        <label>Your Email Address :</label>
-                        <input type="email" class="form-control" name="email" id="email" placeholder=" Email Address" value="<%= Email != null ? Email : "" %>" data-rule="email" data-msg="Please enter a valid email" required>
-                        <div class="validate"></div>
-                     </div>
-
-                     <div class="col-md-6 form-group mt-3 mt-md-0">
-                        <label>Your Mobile number :</label>
-                        <input type="text" class="form-control" name="phone" id="phone" placeholder=" contact number" data-rule="minlen:4" value="<%= Mobile != null ? Mobile : "" %>" data-msg="Please enter at least 4 chars" required>
-                        <div class="validate"></div>
-                      </div>
-
-                      <div class="col-md-6 form-group mt-3 mt-md-0">
-                        <label>N.I.C. Number:</label>
-                        <input type="text" name="nic" class="form-control" id="nic" value="<%= Nic != null ? Nic : "" %>" placeholder="Insert your Nic Number" required>
-                        <div class="validate"></div>
-                      </div>
-
-                       <div class="col-lg-6 col-md-6 form-group mt-3 mt-md-0">
-                        <label>Select Vehicle :</label>
-                        <select type="text" class="form-control" name="vehicle" id="vehicle" placeholder="" >
-                            <option value="">Select a Vehicle</option>
-                            <%
-                                List<String> vehicles = (List<String>) session.getAttribute("vehicles");
-                                if (vehicles != null) {
-                                    for (String vehicle : vehicles) {
-                            %>
-                                        <option value="<%= vehicle %>"><%= vehicle %></option>
-                            <%
-                                    }
-                                }
-                            %>
-                            <div class="validate"></div>
-                        </select>
-                      </div>
-
-                      <div class="col-lg-6 col-md-6 form-group mt-3 mt-md-0">
-                        <label>Select Driver :</label>
-                        <select type="text" class="form-control" name="driver" id="driver" placeholder="" >
-                          <option>Driver Type</option>
-                          <option value ="with">With a Driver</option>
-                          <option value ="without">Without a Driver </option>
-
-                            <div class="validate"></div>
-                        </select>
-                      </div>
-
-                      <div class="col-md-6 form-group mt-3 mt-md-0">
-                        <label>Select pickup Date :</label>
-                        <input type="date" name="date" class="form-control" id="date" placeholder="Pickup Date" data-rule="minlen:4" data-msg="Please enter at least 4 chars" required>
-                        <div class="validate"></div>
-                      </div>
-
-                      <script>
-
-                          let today = new Date().toISOString().split('T')[0];
-
-
-                          document.getElementById("date").setAttribute("min", today);
-                      </script>
-
-
-                      <div class="col-md-6 form-group mt-3 mt-md-0">
-                        <label>Select Pickup Time :</label>
-                         <input type="time" class="form-control" name="time" id="time" placeholder="Pickup time" data-rule="minlen:4" data-msg="Please enter at least 4 chars" required>
-                        <input type="hidden" name="formattedTime" id="formattedTime">
-                        <div class="validate"></div>
-                      </div>
-
-                        <script>
-                            document.getElementById("time").addEventListener("change", function () {
-                                let timeInput = this.value; // Get the time (HH:mm format)
-                                let formattedTimeInput = document.getElementById("formattedTime");
-
-                                if (timeInput) {
-                                    let [hours, minutes] = timeInput.split(":");
-                                    let ampm = hours >= 12 ? "PM" : "AM";
-                                    hours = hours % 12 || 12; // Convert 0 to 12 for AM
-                                    formattedTimeInput.value = hours + ":" + minutes + " " + ampm;
-                                }
-                            });
-                        </script>
-
-                      <div class="col-md-6 form-group mt-3 mt-md-0">
-                        <label>Pickup Address:</label>
-                        <input type="text" name="pickaddress" class="form-control" id="pickad" placeholder="Start Destination" required>
-                        <div class="validate"></div>
-                      </div>
-
-                    <div class="col-md-6 form-group mt-3 mt-md-0">
-                        <label>Drop off Address:</label>
-                        <input type="text" name="dropaddress" class="form-control" id="dropad" placeholder="End Destination" required>
-                        <div class="validate"  style="color:red;"></div>
-                    </div>
-
-
-
-                    </div>
-                             <div  class="col-12 d-flex justify-content-center mt-3">
-
-                                <button type="submit" class="bookbtn" >B o o k_N o w </button>
-                             </div>
-                    <script>
-                                // Get the checkbox and button elements
-                                const termsCheckbox = document.getElementById("termsCheckbox");
-                                const updateBtn = document.getElementById("updateBtn");
-
-                                // Add an event listener to the checkbox
-                                termsCheckbox.addEventListener("change", function () {
-                                    // Enable the button if checkbox is checked, otherwise disable it
-                                    updateBtn.disabled = !termsCheckbox.checked;
-                                });
-                        </script>
-
-                </div>
-
-
-            </form>
-
-            </div>
-        </div>
-      </div>
 
             <section class="service layout_padding-bottom">
               <div class="service_container">

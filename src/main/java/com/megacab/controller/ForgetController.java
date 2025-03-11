@@ -78,7 +78,7 @@ public class ForgetController extends HttpServlet {
 
 
 		try {
-			// Fix: Correct SQL Query
+
 			String query = "SELECT * FROM login WHERE email=? ";
 			Connection connection = DbConnectionFactory.getConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
@@ -88,8 +88,6 @@ public class ForgetController extends HttpServlet {
 
 			if (rs.next()) {
 				String email1 = rs.getString("email");
-
-
 
 				if (email1.equals(email)) {
 					addcode(request,response);

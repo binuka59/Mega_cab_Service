@@ -71,11 +71,15 @@
 
                           <h3> <%= vehicle.getName() %> </h3>
                           <h6>
-                            <span>Initial Charge: </span> Rs<span1 class="enter" ><%= vehicle.getInicharge() %>/</span1>
+                            <span>Initial Charge: </span> <span1 class="enter" >RS <%= vehicle.getInicharge() %>0</span1>
                           </h6>
 
                           <h6>
-                            <span>Booking Fee: </span> <span1 class="enter" ><%=vehicle.getBookfee()%></span1>
+                            <span>Booking Fee: </span> <span1 class="enter" >RS <%=vehicle.getBookfee()%>0</span1>
+
+                          </h6>
+                          <h6>
+                            <span>with Driver Fee: </span> <span1 class="enter" >RS <%=vehicle.getDriverfee()%>0</span1>
 
                           </h6>
                           <h5>

@@ -1,5 +1,6 @@
 package com.megacab.model;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Booking {
@@ -18,7 +19,7 @@ public class Booking {
     private  String picktime;
     private  String pickaddress;
     private  String dropaddress;
-
+    private  String total;
 
 
 
@@ -59,10 +60,19 @@ public class Booking {
         this.dropaddress=dropaddress;
     }
 
-
-    public static void add(Booking booking) {
+    public Booking(Integer id, String uname, String time, Date date, String pickaddress, String dropaddress) {
+        this.id=id;
+        this.name=uname;
+        this.picktime=time;
+        this.pickupdate= String.valueOf(date);
+        this.pickaddress=pickaddress;
+        this.dropaddress=dropaddress;
     }
 
+    public Booking(Integer payid, String totalKM) {
+        this.id=payid;
+        this.total= totalKM;
+    }
 
 
     public int getUserId() {
@@ -73,7 +83,13 @@ public class Booking {
         this.userId = userId;
     }
 
+    public String getTotal() {
+        return total;
+    }
 
+    public void setTotal(String  total) {
+        this.total = total;
+    }
 
     public int getVehicleid() {
         return vehicleid;

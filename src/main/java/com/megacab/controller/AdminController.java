@@ -3,23 +3,33 @@ package com.megacab.controller;
 import com.google.protobuf.Value;
 import com.megacab.Dao.DbConnectionFactory;
 import com.megacab.Dao.LoginDao;
+import com.megacab.Dao.PaymentDao;
+import com.megacab.Dao.VehicleDao;
 import com.megacab.model.*;
-import com.megacab.service.BookingService;
-import com.megacab.service.DriverService;
-import com.megacab.service.LoginService;
-import com.megacab.service.VehicleService;
+import com.megacab.service.*;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
+@MultipartConfig( // Enables file upload handling
+		fileSizeThreshold = 1024 * 1024 * 2,  // 2MB
+		maxFileSize = 1024 * 1024 * 10,       // 10MB
+		maxRequestSize = 1024 * 1024 * 50     // 50MB
+)
 /**
  * Servlet implementation class AdminController
  */
@@ -51,6 +61,21 @@ public class AdminController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		List<String> vehicleList = new ArrayList<>();
+
+		try (Connection conn = DbConnectionFactory.getConnection();
+			 PreparedStatement stmt = conn.prepareStatement("SELECT v_name FROM vehicle");
+			 ResultSet rs = stmt.executeQuery()) {
+
+			while (rs.next()) {
+				vehicleList.add(rs.getString("v_name"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		request.setAttribute("vehicleList", vehicleList);
+
 		String action = request.getParameter("action");
 		if (action.equals("vehicle"))
 		{
@@ -115,7 +140,7 @@ public class AdminController extends HttpServlet {
 			request.setAttribute("AdminController", VehicledetailList );
 
 			request.getRequestDispatcher("WEB-INF/view/Admin/updatevehicle.jsp").forward(request , response);
-		} else if (action.equals("delete"))
+	} else if (action.equals("delete"))
 		{
 			String deleteid =request.getParameter("deleteid");
 			String query = "DELETE FROM vehicle WHERE vehicleid = ?";
@@ -135,7 +160,7 @@ public class AdminController extends HttpServlet {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			request.getRequestDispatcher("WEB-INF/view/Admin/Adminvehicle.jsp").forward(request , response);
+			response.sendRedirect(request.getContextPath() + "/AdminController?action=vehicle");
 		} else if (action.equals("dredit"))
 		{
 			String deditid =request.getParameter("dreditid");
@@ -162,7 +187,7 @@ public class AdminController extends HttpServlet {
 				} else {
 					System.out.println("No vehicle found with ID " + ddeleteid);
 				}
-				displaydriver(request , response);
+				response.sendRedirect(request.getContextPath() + "/AdminController?action=driver");
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
@@ -184,7 +209,7 @@ public class AdminController extends HttpServlet {
 				} else {
 					System.out.println("No vehicle found with ID " + activeid);
 				}
-				displaydriver(request , response);
+				response.sendRedirect(request.getContextPath() + "/AdminController?action=driver");
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
@@ -200,6 +225,43 @@ public class AdminController extends HttpServlet {
 			request.getRequestDispatcher("WEB-INF/view/Admin/Showbooking.jsp").forward(request , response);
 
 
+		}else if (action.equals("cancel"))
+		{
+			Integer  cid = Integer.valueOf(request.getParameter("cancelid"));
+			Vehicle vehicle1 = new Vehicle(cid);
+			vehicle1.setId(Integer.valueOf(cid));
+			vehicle1.setStatus("Admin Cancel");
+			VehicleDao.cancelbook(vehicle1);
+
+			Payment payment = new Payment(cid);
+			payment.setId(cid);
+			PaymentDao.deletebook(payment);
+			String email="";
+			String cancelquery = "SELECT L.email " +
+					"FROM booking B " +
+					"JOIN login L ON B.uid = L.id " +
+					"WHERE B.bid = ?";
+			try ( Connection connection = DbConnectionFactory.getConnection();
+				  PreparedStatement stlast = connection.prepareStatement(cancelquery)) {
+				stlast.setInt(1, cid);
+				ResultSet resultSet = stlast.executeQuery();
+				if (resultSet.next()) {
+					email = resultSet.getString("email");
+
+				}
+
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+			String messageBody = "Your Booking Cancel. \n\n";
+			messageBody += "Booking Number:- MCS00"+cid+"\n";
+			messageBody += "...Mega Cab Service...\n";
+			String subject = "Mega_CAB_Service Booking Details";
+
+			EmailService EmailService = new EmailService();
+			EmailService.sendEmail(email,  messageBody, subject);
+			response.sendRedirect(request.getContextPath() + "/AdminController?action=book");
+
 		}
 
 //		response.getWriter().append("Served at: ").append(request.getContextPath());
@@ -214,11 +276,13 @@ public class AdminController extends HttpServlet {
 		if(action.equals("addadmin"))
 		{
 			addadmin(request,response);
-		} else if (action.equals("updateadmin"))
+		}
+
+		else if (action.equals("updateadmin"))
 		{
 			String id =request.getParameter("id");
 			String name= request.getParameter("name");
-			String mobile = request.getParameter("phone");
+			String mobile = request.getParameter("mobile");
 			String email =request.getParameter("email");
 			String nic = request.getParameter("nic");
 			System.out.println("name is4"+name);
@@ -229,12 +293,9 @@ public class AdminController extends HttpServlet {
 			login.setEmail(email);
 			login.setNic(nic);
 			LoginDao.updateAdmin(login);
-		}
+			response.sendRedirect(request.getContextPath() + "/AdminController?action=adminview");
+     }
 
-
-
-
-		request.getRequestDispatcher("WEB-INF/view/Admin/Admindetail.jsp").forward(request , response);
 
 		doGet(request, response);
 	}
@@ -262,7 +323,7 @@ public class AdminController extends HttpServlet {
 		if (Apassword == null || Aconpassword == null || !Apassword.equals(Aconpassword)) {
 			request.setAttribute("errorMessage", "Passwords do not match! Please enter the same password.");
 			request.getRequestDispatcher("WEB-INF/view/Admin/Admindriver.jsp").forward(request, response);
-			return; // Stop further execution
+			return;
 		}
 
 			Login login = new Login(Aname,mobile,Aemail,Anic,Apassword,status);
@@ -279,6 +340,46 @@ public class AdminController extends HttpServlet {
 
 		request.getRequestDispatcher("WEB-INF/view/Admin/Admindriver.jsp").forward(request , response);
 	}
+	private void adddata(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		Part filePart = request.getPart("image");
+		String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+
+		String uploadPath = getServletContext().getRealPath("") + File.separator + "assets/user/img";
+		File uploadDir = new File(uploadPath);
+		if (!uploadDir.exists()) uploadDir.mkdir();
+
+		String filePath = uploadPath + File.separator + fileName;
+		filePart.write(filePath);
+
+
+
+		String name = request.getParameter("name");
+		String pri = request.getParameter("price");
+		String additionprice = request.getParameter("addinprice");
+		String estimate = request.getParameter("estimate");
+		String vehicletype = request.getParameter("vehicle");
+
+		double priceValue = Double.parseDouble(pri);
+		double addinPriceValue = Double.parseDouble(additionprice);
+		String price = String.format("%.2f", priceValue);
+		String addinprice = String.format("%.2f", addinPriceValue);
+		String status = "Allow";
+
+		Vehicle vehicle = new Vehicle(fileName, name, price, addinprice, estimate, vehicletype, status);
+		vehicle.setFilename(fileName);
+		vehicle.setName(name);
+		vehicle.setPrice(Double.parseDouble(price));
+		vehicle.setAdditionalprice(addinprice);
+		vehicle.setEstimate(estimate);
+		vehicle.setStatus(status);
+		vehicle.setType(vehicletype);
+		VehicleDao.addData(vehicle);
+
+		// ✅ Use Redirect - Make Sure No Prior Output is Sent
+		response.sendRedirect(request.getContextPath() + "/AdminController?action=vehicle");
+	}
+
 
 
 

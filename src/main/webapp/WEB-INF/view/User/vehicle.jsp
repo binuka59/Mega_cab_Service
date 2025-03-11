@@ -33,20 +33,30 @@
                 <div class="container-fluid bg-light  ">
                     <div class="container text-center animated bounceInDown">
                         <h1 class="display">Vehicle Details</h1>
+                       <h3 id="error-message" style="color: red;padding-left:8rem;font-size:1.3rem;font-weight:bold;font-family:Georgia, 'Times New Roman', Times, serif;">
+                              <% if (request.getAttribute("errorMessage") != null) { %>
+                                  <%= request.getAttribute("errorMessage") %>
+                              <% } %>
+                       </h3>
 
                     </div>
                 </div>
           <section class="vehicle_section layout_padding-bottom">
               <div class="vehicle_container">
                 <div class="container ">
+
                   <div class="row">
                      <%
                            List<Vehicle> VehicleList = (List<Vehicle>) request.getAttribute("VehicleController");
                            if (VehicleList != null && !VehicleList.isEmpty()) {
                                for (Vehicle vehicle : VehicleList) {
+                                String sta = vehicle.getStatus();
+                                  if (sta.equals("Allow")) {
+
                       %>
 
                     <div class="col-md-4">
+                    <a href="BookingController?action=add&id=<%= vehicle.getId() %>">
                       <div class="box ">
 
                         <div class="detail-box">
@@ -54,12 +64,38 @@
                           <h3> <%= vehicle.getName() %></h3>
 
                             <h6>
-                                <% String st = vehicle.getStatus(); %>
-                                <% if (st.equals("Allow")) { %>
-                                    <span2><%= vehicle.getStatus() %></span2>
-                                <% } else { %>
-                                    <span2 style="color:#ff0000"><%= vehicle.getStatus() %></span2>
-                                <% } %>
+
+                               <span2><%= vehicle.getStatus() %></span2>
+
+                            </h6>
+
+                          <h6>
+                            <span>Estimated count of KM:</span> <span1 class="enter" id="enter1"> <%= vehicle.getEstimate() %>KM</span1>
+                          </h6>
+
+                          <h6>
+                            <span>Charging for 1km:</span> <span1 class="enter" id="enter1"> RS: <%= vehicle.getPrice() %>0<span1>
+                          </h6>
+                          <h6>
+                            <span>Charge for additional 1km: </span> <span1 class="enter" id="enter1">RS: <%= vehicle.getAdditionalprice()%>0</span1>
+                          </h6>
+
+                        </div>
+                      </div>
+                     </a>
+                    </div>
+
+                    <%}else{%>
+                  <div class="col-md-4">
+
+                      <div class="box" onclick="showErrorMessage()">
+
+                        <div class="detail-box ">
+                        <img src="<%= vehicle.getFilename() %>" class="img-fluid animated" alt="">
+                          <h3> <%= vehicle.getName() %></h3>
+
+                            <h6>
+                                <span2 style="color:#ff0000"><%= vehicle.getStatus() %></span2>
                             </h6>
 
                           <h6>
@@ -73,25 +109,27 @@
                             <span>Charge for additional 1km: </span> <span1 class="enter" id="enter1">RS: <%= vehicle.getAdditionalprice()%></span1>
                           </h6>
 
-
                         </div>
-
                       </div>
-                    </div>
 
-                    <%
-                                                          }
+                  </div>
+                    <% }                                     }
                                                       } else {
                                                   %>
                                                       <p>No vehicle type display.</p>
                                                   <%
                                                       }
                                                   %>
-                  </div>
+
+                </div>
                 </div>
               </div>
             </section>
-
+<script>
+    function showErrorMessage() {
+        document.getElementById("error-message").innerText = "This vehicle is always booked!";
+    }
+</script>
 
 
             <section class="service layout_padding-bottom">

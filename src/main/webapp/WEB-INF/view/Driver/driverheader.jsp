@@ -67,7 +67,13 @@
 
 
             <li class="nav-item dropdown pe-3">
+                  <%
 
+                        if (userName == null) {
+                            response.sendRedirect("Login?action=logout");
+                            return;
+                        }
+                    %>
 
               <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                 <%= userName %>
@@ -79,7 +85,7 @@
                 </li>
 
                 <li>
-                  <a class="dropdown-item d-flex align-items-center" href="#">
+                  <a class="dropdown-item d-flex align-items-center" href="Login?action=logout">
                     <i class="bi bi-box-arrow-right"></i>
                     <span>Log_Out</span>
                   </a>
@@ -108,9 +114,9 @@
 
                <nav id="navbar" class="navbar">
                  <ul>
-                   <li><a class="nav-link scrollto" href="Login?action=home">Home</a></li>
-                   <li><a class="nav-link scrollto" href="Login?action=booking">Vehicle</a></li>
-                   <li><a class="nav-link scrollto" href="Login?action=payment">Payment</a></li>
+                   <li><a class="nav-link scrollto" href="Login?action=DriverH">Home</a></li>
+                   <li><a class="nav-link scrollto" href="DriverController?action=DVehicle">Vehicle</a></li>
+                   <li><a class="nav-link scrollto" href="DriverController?action=DPayment">Payment</a></li>
 
 
 

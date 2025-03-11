@@ -3,8 +3,10 @@ package com.megacab.controller;
 import com.megacab.Dao.BookingDao;
 import com.megacab.Dao.DbConnectionFactory;
 import com.megacab.Dao.LoginDao;
+import com.megacab.Dao.PaymentDao;
 import com.megacab.model.Booking;
 import com.megacab.model.Login;
+import com.megacab.model.Payment;
 import com.megacab.model.Vehicle;
 import com.megacab.service.BookingService;
 import com.megacab.service.HeaderService;
@@ -84,6 +86,12 @@ public class LoginController extends HttpServlet {
 		 }
 		 else if (action.equals("payment"))
 		 {
+			 PaymentDao paymentDao = new PaymentDao();
+
+			 Integer userId = (Integer) request.getSession().getAttribute("userId");
+
+			 List<Payment> payment = paymentDao.getmypayment(userId);
+			 request.setAttribute("LoginController", payment);
 			 request.getRequestDispatcher("WEB-INF/view/User/payment.jsp").forward(request, response);
 		 }
 		 else if (action.equals("contact"))
@@ -99,6 +107,9 @@ public class LoginController extends HttpServlet {
 		 } else if (action.equals("vehicle")) {
 			 displayvehicle(request , response);
 
+		 }else if (action.equals("DriverH"))
+		 {
+			 showdriverForm(request ,response);
 		 }
 
 
@@ -161,14 +172,14 @@ public class LoginController extends HttpServlet {
 
 
 
-					if (status.equals("user")) {
+					if (status.equals("User")) {
 
 						showhomeForm(request ,response);
 
 					}
 
 
-					else if (status.equals("admin"))
+					else if (status.equals("Admin"))
 					{
 
 						List<Booking> BookingList = new ArrayList<>();
@@ -178,9 +189,9 @@ public class LoginController extends HttpServlet {
 
 						request.getRequestDispatcher("WEB-INF/view/Admin/AdminHome.jsp").forward(request, response);
 					}
-					else if(status.equals("driver"))
+					else if(status.equals("Driver"))
 					{
-						request.getRequestDispatcher("WEB-INF/view/Driver/DriverHome.jsp").forward(request, response);
+						showdriverForm(request ,response);
 					}
 					else {
 						request.setAttribute("errorMessage", "Invalid credentials");
@@ -238,8 +249,19 @@ public class LoginController extends HttpServlet {
 	}
 	private void showadminForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+	}
+
+	private void showdriverForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		BookingDao bookingDao = new BookingDao();
+
+		Integer userId = (Integer) request.getSession().getAttribute("userId");
+
+		List<Booking> DriverList = BookingDao.getdriverbook(userId);
+		request.setAttribute("LoginController", DriverList);
 
 
+        request.getRequestDispatcher("WEB-INF/view/Driver/DriverHome.jsp").forward(request, response);
 	}
 
 
@@ -270,20 +292,50 @@ public class LoginController extends HttpServlet {
 		String name = request.getParameter("name");
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
-		String status = "user";
+		String status = "User";
 
+		// Query to check if the email already exists
+		String checkEmailQuery = "SELECT COUNT(*) FROM login WHERE email = ?";
+		String insertQuery = "INSERT INTO login (name, email, password, status) VALUES (?, ?, ?, ?)";
 
-		Login login = new Login(name,email, password, status);
-		login.setName(name);
-		login.setEmail(email);
-		login.setPassword(password);
-		login.setStatus(status);
+		try (Connection connection = DbConnectionFactory.getConnection()) {
 
-		LoginDao.addaccount(login);
-		response.sendRedirect(request.getContextPath() + "/index.jsp");
+			// Check if email already exists
+			try (PreparedStatement checkStmt = connection.prepareStatement(checkEmailQuery)) {
+				checkStmt.setString(1, email);
+				try (ResultSet rs = checkStmt.executeQuery()) {
+					if (rs.next() && rs.getInt(1) > 0) {
+						// Email already exists, return error message
+						request.setAttribute("errorMessage", "Email Already Exists. Try another email!");
+						request.getRequestDispatcher("WEB-INF/view/Login/Register.jsp").forward(request, response);
+						return;
+					}
+				}
+			}
 
+			// If email does not exist, insert the new user
+			try (PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
+				insertStmt.setString(1, name);
+				insertStmt.setString(2, email);
+				insertStmt.setString(3, password);
+				insertStmt.setString(4, status);
 
+				int rowsAffected = insertStmt.executeUpdate();
+				if (rowsAffected > 0) {
+					response.sendRedirect(request.getContextPath() + "/index.jsp");
+				} else {
+					request.setAttribute("errorMessage", "Error creating account. Please try again.");
+					request.getRequestDispatcher("/index.jsp").forward(request, response);
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			request.setAttribute("errorMessage", "Database error occurred. Please try again.");
+			request.getRequestDispatcher("error.jsp").forward(request, response);
+		}
 	}
+
 
 
 

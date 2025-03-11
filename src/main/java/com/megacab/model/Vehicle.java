@@ -13,6 +13,25 @@ public class Vehicle {
     private String additionalprice;
     private String estimate;
 
+    public Vehicle(Integer cid) {
+        this.id=cid;
+    }
+
+    public Vehicle(Integer userId, String vname) {
+        this.id=userId;
+        this.name=vname;
+    }
+
+    public double getDriverfee() {
+        return driverfee;
+    }
+
+    public void setDriverfee(double driverfee) {
+        this.driverfee = driverfee;
+    }
+
+    private double driverfee;
+
     public Vehicle(String image, String vname, double price, String status) {
         filename=image;
         this.name=vname;
@@ -91,11 +110,12 @@ public class Vehicle {
 
 
 
-    public Vehicle(String name, String image, double initial, double fee) {
+    public Vehicle(String name, String image, double initial, double fee, double driver) {
         this.name = name;
         this.filename = image;
         this.inicharge = initial;
-        this.price = fee;
+        this.bookfee = fee;
+        this.driverfee=driver;
 
     }
 

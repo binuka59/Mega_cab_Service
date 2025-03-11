@@ -84,21 +84,42 @@
 
                              <div class="col-md-6 form-group mt-3 mt-md-0">
                                 <label>E-mail Address:</label>
-                                <input type="email" class="form-control" name="email"  value="<%= driver.getEmail() %>"  placeholder="Enter E-mail Address" >
+                                <input type="email" class="form-control" name="email"  value="<%= driver.getEmail() %>"  placeholder="Enter E-mail Address"
+                                 pattern="[a-zA-Z0-9._%+-]+@gmail\.com"
+                                 title="Please enter a valid Gmail address (e.g., example@gmail.com)" required>
                                 <div class="validate"></div>
                              </div>
 
-                             <div class="col-md-6 form-group mt-3 mt-md-0">
+                             <div class="col-md-4 form-group mt-3 mt-md-0">
                                 <label>Mobile Number:</label>
-                                <input type="number" class="form-control" name="mobile" value="<%= driver.getPhone() %>" placeholder="Enter Mobile Number" >
+                                <input type="tel" class="form-control" name="mobile" value="<%= driver.getPhone() %>" placeholder="Enter Mobile Number" maxlength="10" pattern="\d{10}" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
                                 <div class="validate"></div>
                              </div>
 
-                             <div class="col-md-6 form-group mt-3 mt-md-0">
+                             <div class="col-md-4 form-group mt-3 mt-md-0">
                                 <label>N.I.C. Number:</label>
-                                <input type="text" class="form-control" name="nic" value="<%= driver.getNic() %>"  placeholder="Enter NIC Number " >
+                                <input type="text" class="form-control" name="nic" value="<%= driver.getNic() %>"  placeholder="Enter NIC Number "pattern="(\d{12}|\d{9}[Vv])"
+                                  title="Enter a 12-digit number or a 9-digit number ending with 'V' or 'v'" required>
                                 <div class="validate"></div>
                              </div>
+
+                            <div class="col-md-4 form-group mt-3 mt-md-0">
+                                <label for="vehicle">Select Vehicle:</label>
+                                <select id="vehicle" class="form-control" name="vehicle" required>
+                                    <option value="<%= driver.getVehiclename() %>"><%= driver.getVehiclename() %> </option>
+                                    <%
+                                        List<String> vehicleList = (List<String>) request.getAttribute("vehicleList");
+                                        if (vehicleList != null) {
+                                            for (String vehicle : vehicleList) {
+                                    %>
+                                            <option value="<%= vehicle %>"><%= vehicle %></option>
+                                    <%
+                                            }
+                                        }
+                                    %>
+                                </select>
+                                <div class="validate"></div>
+                            </div>
                          </div>
                              <div class = "col-lg-6 col-md-6 form-group mt-3 mt-md-0">
                                 <button type="submit" class="bookbtn">Update Now</button>
