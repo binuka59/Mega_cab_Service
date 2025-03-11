@@ -54,7 +54,7 @@
             <div class="top booking">
                 <div class="container-fluid py-6">
 
-                <form action="BookingController?action=accept" method="post" >
+                <form>
                  <input type="hidden" name="userId" value="<%= session.getAttribute("userId") %>">
 
 
@@ -101,7 +101,7 @@
                          </div>
                              <div  class="col-12 d-flex justify-content-center mt-3">
 
-                                <button type="submit" class="bookbtn" id="updateBtn" disabled>B o o k_N o w </button>
+                                <a href="Login?action=booking" class="bookbtn" id="updateBtn" disabled>B o o k_N o w </a>
                              </div>
 
                         </form>

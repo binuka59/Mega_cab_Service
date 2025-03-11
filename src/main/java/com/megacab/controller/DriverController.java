@@ -1,13 +1,8 @@
 package com.megacab.controller;
 
-import com.megacab.Dao.DbConnectionFactory;
-import com.megacab.Dao.DriverDao;
-import com.megacab.Dao.LoginDao;
-import com.megacab.Dao.VehicleDao;
-import com.megacab.model.AdminDriver;
+import com.megacab.Dao.*;
+import com.megacab.model.*;
 import com.megacab.model.Driver;
-import com.megacab.model.Login;
-import com.megacab.model.Vehicle;
 import com.megacab.service.DriverService;
 import com.megacab.service.LoginService;
 
@@ -58,6 +53,12 @@ public class DriverController<JSONArray, JSONObject> extends HttpServlet {
 		if (action == null || action.equals("driver")) {
 			showdriverForm(request, response);
 		}
+		else if (action.equals("DVehicle")) {
+			Showdrivervehicle(request , response);
+		}
+		else if (action.equals("DPayment")) {
+			request.getRequestDispatcher("WEB-INF/view/Driver/DPayment.jsp").forward(request, response);
+		}
 
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
@@ -71,6 +72,7 @@ public class DriverController<JSONArray, JSONObject> extends HttpServlet {
 		{
 			adddriver(request , response);
 		}
+
 		else if (action.equals("update"))
 		{
 			String id = request.getParameter("id");
@@ -112,8 +114,10 @@ public class DriverController<JSONArray, JSONObject> extends HttpServlet {
 			String email = request.getParameter("email");
 			String mobile = request.getParameter("mobile");
 			String nic = request.getParameter("nic");
+			String vname = request.getParameter("vehicle");
 
-			Driver driver = new Driver(id,fileName,name,email,mobile,nic);
+
+			Driver driver = new Driver(id,fileName,name,email,mobile,nic,vname);
 			driver.setId(Integer.parseInt(id));
 			driver.setFilename(fileName);
 			driver.setName(name);
@@ -123,7 +127,7 @@ public class DriverController<JSONArray, JSONObject> extends HttpServlet {
 			DriverDao.updateData(driver);
 
 			request.setAttribute("message", "Driver Details updated successfully!");
-			request.getRequestDispatcher("WEB-INF/view/Admin/Admindriver.jsp").forward(request, response);
+			response.sendRedirect(request.getContextPath() + "/AdminController?action=driver");
 
 		}
 
@@ -160,6 +164,7 @@ public class DriverController<JSONArray, JSONObject> extends HttpServlet {
 		String name = request.getParameter("name");
 		String email = request.getParameter("email");
 		String mobile = request.getParameter("mobile");
+		String vehicle = request.getParameter("vehicle");
 		String nic = request.getParameter("nic");
 		String password = request.getParameter("password");
 		String repassword = request.getParameter("conpassword");
@@ -169,20 +174,33 @@ public class DriverController<JSONArray, JSONObject> extends HttpServlet {
 		}
 
 
-		AdminDriver driver = new AdminDriver(fileName,name,email,mobile,nic,password);
+		AdminDriver driver = new AdminDriver(fileName,name,email,mobile,vehicle,nic,password);
 		driver.setFilename(fileName);
 
 		driver.setName(name);
 		driver.setEmail(email);
 		driver.setPhone(mobile);
+		driver.setVehicle(vehicle);
 		driver.setNic(nic);
 		driver.setPassword(password);
 
 		DriverDao.addData(driver);
 
 		request.setAttribute("errorMessage", "Driver details added successfully!");
-		request.getRequestDispatcher("WEB-INF/view/Admin/Admindriver.jsp").forward(request, response);
+		request.getRequestDispatcher("AdminController?action=driver").forward(request, response);
 
+	}
+	private void Showdrivervehicle(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		DriverDao driverDao = new DriverDao();
+
+		Integer userId = (Integer) request.getSession().getAttribute("userId");
+
+		List<Vehicle> DriverList = DriverDao.getdrivervehicle(userId);
+		request.setAttribute("DriverController", DriverList);
+
+
+		request.getRequestDispatcher("WEB-INF/view/Driver/Drivervehicle.jsp").forward(request, response);
 	}
 
 

@@ -63,7 +63,7 @@
                                       <div class="invalid-feedback">Please fill out this Name field.</div>
                              </div>
 
-                            <div class="col-md-6 form-group mt-3 mt-md-0">
+                            <div class="col-md-3 form-group mt-3 mt-md-0">
                                 <label>Mobile Number:</label>
                                 <input type="tel" class="form-control" name="mobile" placeholder="Enter Mobile Number" maxlength="10" pattern="\d{10}" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
                                 <div class="validate"></div>
@@ -74,6 +74,24 @@
                                 <input type="email" class="form-control" name="email" placeholder="Enter E-mail Address"
                                        pattern="[a-zA-Z0-9._%+-]+@gmail\.com"
                                        title="Please enter a valid Gmail address (e.g., example@gmail.com)" required>
+                                <div class="validate"></div>
+                            </div>
+
+                            <div class="col-md-3 form-group mt-3 mt-md-0">
+                                <label for="vehicle">Select Vehicle:</label>
+                                <select id="vehicle" class="form-control" name="vehicle" required>
+                                    <option value="">Select Vehicle</option>
+                                    <%
+                                        List<String> vehicleList = (List<String>) request.getAttribute("vehicleList");
+                                        if (vehicleList != null) {
+                                            for (String vehicle : vehicleList) {
+                                    %>
+                                            <option value="<%= vehicle %>"><%= vehicle %></option>
+                                    <%
+                                            }
+                                        }
+                                    %>
+                                </select>
                                 <div class="validate"></div>
                             </div>
 
@@ -125,7 +143,8 @@
 						      <th>Driver Name</th>
 						      <th>E-mail Address</th>
 						      <th>Mobile Number</th>
-						      <th>N.I.C. Number </th>
+						      <th>N.I.C. Number</th>
+						      <th>Vehicle</th>
 						      <th>Status</th>
 						      <th>Action</th>
 						    </tr>
@@ -143,6 +162,7 @@
                                         <td ><%= driver.getEmail() %></td>
                                         <td><%= driver.getPhone() %></td>
                                         <td> <%= driver.getNic() %></td>
+                                        <td> <%= driver.getVehiclename() %></td>
                                         <td class="status">
                                             <span class="active">
                                                 <% String st = driver.getStatus();%>

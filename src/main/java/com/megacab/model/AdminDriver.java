@@ -58,6 +58,24 @@ public class AdminDriver {
     private  String email;
     private  String status;
 
+    public String getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(String vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    private  String vehicle;
+
     public String getPassword() {
         return password;
     }
@@ -68,11 +86,12 @@ public class AdminDriver {
 
     private  String password;
 
-    public AdminDriver(String fileName, String name, String email, String mobile, String nic, String password) {
+    public AdminDriver(String fileName, String name, String email, String mobile,String vehicle, String nic, String password) {
         this.filename=fileName;
         this.name=name;
         this.email=email;
         this.phone=mobile;
+        this.vehicle=vehicle;
         this.nic=nic;
         this.password=password;
     }

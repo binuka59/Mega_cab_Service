@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="com.megacab.model.Booking" %>
 
 <!DOCTYPE html>
 <html>
@@ -17,10 +19,10 @@
    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Playball&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="assets/user/css/style.css">
-    <link rel="stylesheet" href="assets/user/css/gg.css">
+    <link rel="stylesheet" href="assets/user/css/user.css">
     <link rel="stylesheet" href="assets/user/css/payment.css">
     <link rel="stylesheet" href="assets/user/css/footer.css">
-
+    <link rel="stylesheet" href="assets/admin/css/menu.css">
    <link href="assets/user/css/bootstrap.min.css" rel="stylesheet">
    <link href="assets/user/css/bootstrap-icons.css" rel="stylesheet">
 
@@ -33,52 +35,72 @@
                 <div class="container-fluid bg-light  ">
                     <div class="container text-center animated bounceInDown">
                         <h1 class="display">Driver</h1>
-                        <h1 class="message" id="MESSAGE" name="MESSAGE">
-                              <% if (request.getAttribute("Message") != null) { %>
-                                  <%= request.getAttribute("Message") %>
+                       <h3 style="color: red;padding-left:8rem;font-size:1.3rem;font-weight:bold;font-family:Georgia, 'Times New Roman', Times, serif;">
+                              <% if (request.getAttribute("errorMessage") != null) { %>
+                                  <%= request.getAttribute("errorMessage") %>
                               <% } %>
-                        </h1>
+                       </h3>
 
                     </div>
                 </div>
-          <section class="payment_section layout_padding-bottom">
-              <div class="payment_container">
-                <div class="container ">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="box ">
-                        <div class="img-box">
+                        <section class="ftco-section">
+                            <h1>Book Information</h1>
+                            <div class="container">
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="table-wrap">
+                                            <table class="table table-responsive-xl">
+                                              <thead>
+                                                <tr>
+
+                                                  <th>Book No</th>
+                                                  <th>customer</th>
+                                                  <th>PickTime</th>
+                                                  <th>PickDate</th>
+                                                  <th>Journey</th>
+                                                  <th>Status</th>
+                                                </tr>
+                                              </thead>
+                                        <tbody>
+                                          <%
+                                               List<Booking> DriverList = (List<Booking>) request.getAttribute("LoginController");
+                                               if (DriverList != null && !DriverList.isEmpty()) {
+                                                   for (Booking booking : DriverList) {
+                                          %>
+
+                                                <tr class="alert" role="alert">
+
+                                                    <td >MCS00<%=booking.getId()%></td>
+                                                    <td><%=booking.getName()%></td>
+                                                    <td><%=booking.getPicktime()%></td>
+                                                    <td><%=booking.getPickupdate()%></td>
+                                                    <td><%=booking.getPickaddress()%> - <%=booking.getDropaddress()%></td>
+                                                    <td>
 
 
-                        </div>
-                        <div class="detail-box">
-                            <h3>Paied</h3>
-                          <h6>
-                            <span>Booking Number : </span> <span1 class="enter" id="enter1">MCS0001</span1>
-                          </h6>
-                          <h6>
-                            <span>Payment Method: </span> <span1 class="enter" id="enter1"> Cash</span1>
-                          </h6>
-                          <h6>
-                            <span>Vehicle Type: </span> <span1 class="enter" id="enter1"> Car</span1>
-                          </h6>
-                          <h6>
-                            <span> Fee: </span> <span1 class="enter" id="enter1">RS:45000.00</span1>
-                          </h6>
-                          <h6>
-                            <span> Destination: </span> <span1 class="enter" id="enter1">45KM</span1>
-                          </h6>
+                                                        <a href="PaymentController?action=driverpay&dpid=<%=booking.getId()%>" class="btn btn-primary">End Jorney</a>
+                                                    </td>
+                                                </tr>
+                                              <%
+                                                 }
+                                                 } else {
+                                              %>
+                                              <tr>
+                                                  <td colspan="6">No booking data available</td>
+                                              </tr>
+                                              <%
+                                                  }
+                                              %>
 
+                                        </tbody>
 
-                        </div>
-
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </section>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
 
 
             <section class="service layout_padding-bottom">

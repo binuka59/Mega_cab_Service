@@ -55,17 +55,18 @@ public class LoginDao {
 
     public static void updateData(Login login) {
         Integer userid = login.getId();
-        String query = "UPDATE login SET mobile=?, nic=? WHERE id=?";
+        String query = "UPDATE login SET Name=? ,email=?, mobile=?, nic=? WHERE id=?";
 
         try {
 
             Connection connection = DbConnectionFactory.getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
 
-
-            statement.setString(1, String.valueOf(login.getMobile()));
-            statement.setString(2, login.getNic());
-            statement.setInt(3, userid);
+            statement.setString(1, login.getName());
+            statement.setString(2, login.getEmail());
+            statement.setString(3, String.valueOf(login.getMobile()));
+            statement.setString(4, login.getNic());
+            statement.setInt(5, userid);
 
             statement.executeUpdate();
 

@@ -2,6 +2,7 @@ package com.megacab.Dao;
 
 import com.megacab.model.AdminDriver;
 import com.megacab.model.Driver;
+import com.megacab.model.Vehicle;
 
 
 import java.io.File;
@@ -13,9 +14,11 @@ public class DriverDao {
     public static List<Driver> getAllDrivers() {
         List<Driver> driverList = new ArrayList<>();
         String query = "SELECT l.Name AS name, l.email AS email, l.mobile AS mobile, l.nic AS nic, " +
-                "d.Dimage AS image, d.status AS status, d.id AS id " +
+                "d.Dimage AS image, d.status AS status, d.id AS id ,d.vehicle_id AS vid, " +
+                "v.v_name AS vname " +
                 "FROM login l " +
                 "JOIN driver d ON l.id = d.Did " +
+                "JOIN vehicle v ON v.vehicleid = d.vehicle_id "+
                 "WHERE l.status = ?";
 
         try {
@@ -34,9 +37,10 @@ public class DriverDao {
                 String nic = resultSet.getString("nic");
                 String mobile = resultSet.getString("mobile");
                 String email = resultSet.getString("email");
+                String vname = resultSet.getString("vname");
                 String status = resultSet.getString("status");
 
-                driverList.add(new Driver(id, image, name, nic, mobile, email, status));
+                driverList.add(new Driver(id, image, name, nic, mobile, vname, email, status));
             }
 
             // Close resources
@@ -50,8 +54,26 @@ public class DriverDao {
     }
 
     public static void addData(AdminDriver driver) {
+        String  vname = driver.getVehicle();
+        String vid="";
+        String vquery = "SELECT * FROM vehicle WHERE v_name=?";
+
+        try {
+            Connection connection = DbConnectionFactory.getConnection();
+            PreparedStatement statement1 = connection.prepareStatement(vquery);
+            statement1.setString(1, vname);
+            ResultSet resultSet = statement1.executeQuery();
+
+            if(resultSet.next()) {
+                 vid = resultSet.getString("vehicleid");
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         String query = "INSERT INTO login(Name, email, password, mobile, nic, status) VALUES(?, ?, ?, ?, ?, ?)";
-        String driquery = "INSERT INTO driver(Dimage, Did, status) VALUES(?, ?, ?)";
+        String driquery = "INSERT INTO driver(Dimage, Did, status,vehicle_id) VALUES(?, ?, ?,?)";
 
         try (Connection connection = DbConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query);
@@ -85,6 +107,7 @@ public class DriverDao {
                     statement2.setString(1, driver.getFilename());
                     statement2.setInt(2, uid);
                     statement2.setString(3, "Active");
+                    statement2.setString(4, vid);
 
                     statement2.executeUpdate();
                 }
@@ -101,9 +124,11 @@ public class DriverDao {
         List<Driver> DriverListSelect = new ArrayList<>();
 
         String query = "SELECT l.Name AS name, l.email AS email, l.mobile AS mobile, l.nic AS nic, " +
-                "d.Dimage AS image, d.status AS status, d.id AS id " +
+                "d.Dimage AS image, d.status AS status, d.id AS id ,d.vehicle_id AS vid, " +
+                "v.v_name AS vname " +
                 "FROM login l " +
                 "JOIN driver d ON l.id = d.Did " +
+                "JOIN vehicle v ON v.vehicleid = d.vehicle_id "+
                 "WHERE l.status = ? AND d.id=?";
 
         try {
@@ -123,9 +148,10 @@ public class DriverDao {
                 String nic = resultSet.getString("nic");
                 String mobile = resultSet.getString("mobile");
                 String email = resultSet.getString("email");
+                String vname = resultSet.getString("vname");
                 String status = resultSet.getString("status");
 
-                DriverListSelect.add(new Driver(id, image, name, nic, mobile, email, status));
+                DriverListSelect.add(new Driver(id, image, name, nic, mobile,vname, email, status));
             }
 
 
@@ -140,12 +166,31 @@ public class DriverDao {
     }
 
     public static void updateData(Driver driver) {
+        String  vname = driver.getVehiclename();
+        String vid="";
+        String vquery = "SELECT * FROM vehicle WHERE v_name=?";
+
+        try {
+            Connection connection = DbConnectionFactory.getConnection();
+            PreparedStatement statement1 = connection.prepareStatement(vquery);
+            statement1.setString(1, vname);
+            ResultSet resultSet = statement1.executeQuery();
+
+            if(resultSet.next()) {
+                vid = resultSet.getString("vehicleid");
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         String query1 = "UPDATE login l " +
                 "SET l.Name = ?, l.email = ?, l.mobile = ?, l.nic = ? " +
                 "WHERE l.id = (SELECT d.Did FROM driver d WHERE d.id = ?)";
 
         String query2 = "UPDATE driver d " +
-                "SET d.Dimage = ? " +
+                "SET d.Dimage = ? ,d.vehicle_id=?" +
                 "WHERE d.id = ?";
 
         try (Connection connection = DbConnectionFactory.getConnection()) {
@@ -160,10 +205,11 @@ public class DriverDao {
                 statement1.executeUpdate();
             }
 
-            // Update the driver table (for Dimage)
+
             try (PreparedStatement statement2 = connection.prepareStatement(query2)) {
                 statement2.setString(1, driver.getFilename());
-                statement2.setInt(2, driver.getId());
+                statement2.setString(2, vid);
+                statement2.setInt(3, driver.getId());
                 statement2.executeUpdate();
             }
 
@@ -172,6 +218,33 @@ public class DriverDao {
             e.printStackTrace();
             throw new RuntimeException("Error executing update queries", e);
         }
+
+    }
+
+    public static List<Vehicle> getdrivervehicle(Integer userId) {
+        List<Vehicle> DriverList = new ArrayList<>();
+
+
+        String query = "SELECT v.v_name AS name " +
+                "FROM vehicle v " + "JOIN driver d ON v.vehicleid = d.vehicle_id "+
+                "WHERE d.Did=?";
+
+        try (Connection connection = DbConnectionFactory.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             preparedStatement.setString(1, String.valueOf(userId));
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+
+                String vname = resultSet.getString("name");
+
+
+                DriverList.add(new Vehicle(userId,vname));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return DriverList;
 
     }
 }

@@ -122,34 +122,33 @@ public class VehicleController extends HttpServlet {
 		request.setAttribute("/VehicleController", VehicleList);
 	}
 
-		private void adddata(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void adddata(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		Part filePart = request.getPart("image");
 		String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-
 
 		String uploadPath = getServletContext().getRealPath("") + File.separator + "assets/user/img";
 		File uploadDir = new File(uploadPath);
 		if (!uploadDir.exists()) uploadDir.mkdir();
 
-
 		String filePath = uploadPath + File.separator + fileName;
 		filePart.write(filePath);
 
-		response.getWriter().println("File uploaded successfully: " + fileName);
+
 
 		String name = request.getParameter("name");
-		String pri= request.getParameter("price");
-		String additionprice= request.getParameter( "addinprice");
-		String estimate= request.getParameter("estimate");
+		String pri = request.getParameter("price");
+		String additionprice = request.getParameter("addinprice");
+		String estimate = request.getParameter("estimate");
 		String vehicletype = request.getParameter("vehicle");
+
 		double priceValue = Double.parseDouble(pri);
 		double addinPriceValue = Double.parseDouble(additionprice);
 		String price = String.format("%.2f", priceValue);
 		String addinprice = String.format("%.2f", addinPriceValue);
 		String status = "Allow";
 
-		Vehicle vehicle = new Vehicle(fileName, name, price,addinprice,estimate,vehicletype,status);
+		Vehicle vehicle = new Vehicle(fileName, name, price, addinprice, estimate, vehicletype, status);
 		vehicle.setFilename(fileName);
 		vehicle.setName(name);
 		vehicle.setPrice(Double.parseDouble(price));
@@ -159,12 +158,10 @@ public class VehicleController extends HttpServlet {
 		vehicle.setType(vehicletype);
 		VehicleDao.addData(vehicle);
 
-
-		request.setAttribute("message", "Vehicle added successfully!");
-		request.getRequestDispatcher("WEB-INF/view/Admin/Adminvehicle.jsp").forward(request, response);
-
-
+		request.setAttribute("errorMessage", "Vehicle details added successfully!");
+		request.getRequestDispatcher("AdminController?action=vehicle").forward(request, response);
 	}
+
 
 	private void updateData(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Part filePart = request.getPart("image");
@@ -205,7 +202,7 @@ public class VehicleController extends HttpServlet {
 						String filePath = uploadPath + File.separator + fileName;
 						filePart.write(filePath);
 
-						response.getWriter().println("File uploaded successfully: " + fileName);
+//						response.getWriter().println("File uploaded successfully: " + fileName);
 					}
 
 					String pri = request.getParameter("price");
@@ -230,7 +227,7 @@ public class VehicleController extends HttpServlet {
 					VehicleDao.updateVehicleData(vehicle);
 
 					request.setAttribute("message", "Vehicle Details updated successfully!");
-					request.getRequestDispatcher("WEB-INF/view/Admin/Adminvehicle.jsp").forward(request, response);
+					request.getRequestDispatcher("AdminController?action=vehicle").forward(request, response);
 
 				}
 			}

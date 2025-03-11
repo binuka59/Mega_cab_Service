@@ -11,6 +11,7 @@ public class AdminBook {
     private  Double price;
     private  String estimate;
     private  String additional;
+    private  String  status;
 
 
 
@@ -30,6 +31,7 @@ public class AdminBook {
         this.pickupdate=date;
         this.pickaddress=pickaddress;
         this.dropaddress=dropaddress;
+
     }
 
 
@@ -83,7 +85,13 @@ public class AdminBook {
         this.estimate = estimate;
     }
 
+    public String getStatus() {
+        return status;
+    }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getVehicletype() {
         return vehicletype;
@@ -95,7 +103,7 @@ public class AdminBook {
 
     private  String vehicletype;
 
-    public AdminBook(Integer id ,String name, String vehicletype, String time, String date, String pickaddress, String dropaddress) {
+    public AdminBook(Integer id ,String name, String vehicletype, String time, String date, String pickaddress, String dropaddress, String status) {
     this.id=id;
     this.name=name;
     this.vehicletype=vehicletype;
@@ -103,6 +111,7 @@ public class AdminBook {
     this.pickupdate=date;
     this.pickaddress=pickaddress;
     this.dropaddress=dropaddress;
+    this.status=status;
     }
 
     public int getId() {

@@ -58,6 +58,7 @@
 						      <th>PickDate</th>
 						      <th>Journey</th>
 						      <th>Status</th>
+						      <th>Action</th>
 						    </tr>
 						  </thead>
                             <tbody>
@@ -74,10 +75,25 @@
                                         <td><span class="active"><%= booking.getPicktime()%></span></td>
                                         <td><%= booking.getPickupdate()%></span></td>
                                         <td class="status"><span class="active"><%= booking.getPickaddress()%> - <%= booking.getDropaddress()%></span></td>
-                                        <td>
-                                             <a href="AdminController?action=see&seeid=<%= booking.getId() %>" class="btn btn-info">See more</a>
-                                            <button type="button" class="btn btn-danger">Reject</button>
-                                        </td>
+                                        <%String status = booking.getStatus();
+                                            if(status.equals("Accept"))
+                                            {
+                                        %>
+                                            <td style="font-weight:bold;"><%= booking.getStatus()%></span></td>
+                                            <td>
+                                                 <a href="AdminController?action=see&seeid=<%= booking.getId() %>" class="btn btn-info">See more</a>
+                                                 <a href="AdminController?action=cancel&cancelid=<%= booking.getId() %>" class="btn btn-danger">Cancel</button>
+                                            </td>
+                                        <%}else{%>
+                                             <td style="color:red;font-weight:bold;"><%= booking.getStatus()%></span></td>
+                                                <td>
+                                                    <a href="#" class="btn btn-info" style="filter: blur(1px); pointer-events: none;">See more</a>
+
+                                                    <a href="#" class="btn btn-danger" style="filter: blur(1px);pointer-events: none;">Cancel</a>
+                                                </td>
+
+                                        <%}%>
+
                                     </tr>
                                 <%
                                         }

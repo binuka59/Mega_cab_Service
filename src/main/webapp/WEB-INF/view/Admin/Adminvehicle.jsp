@@ -35,11 +35,11 @@
                 <div class="container-fluid bg-light  ">
                     <div class="container text-center animated bounceInDown">
                         <h1 class="display">Vehicle Details</h1>
-                        <h1 class="message">
-                              <% if (request.getAttribute("Message") != null) { %>
-                                  <%= request.getAttribute("Message") %>
+                       <h3 style="color: red;padding-left:8rem;font-size:1.3rem;font-weight:bold;font-family:Georgia, 'Times New Roman', Times, serif;">
+                              <% if (request.getAttribute("errorMessage") != null) { %>
+                                  <%= request.getAttribute("errorMessage") %>
                               <% } %>
-                        </h1>
+                       </h3>
 
                     </div>
                 </div>
