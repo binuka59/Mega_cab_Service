@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="assets/admin/css/menu.css">
     <link rel="stylesheet" href="assets/user/css/footer.css">
 
+
    <link href="assets/user/css/bootstrap.min.css" rel="stylesheet">
    <link href="assets/user/css/bootstrap-icons.css" rel="stylesheet">
 
@@ -108,15 +109,17 @@
               <div class="testimonial-item">
 
                 <h3> Google Map</h3>
-                  <iframe
+
+                <iframe
+
+                    style="border: 0; border-radius: 10px; margin-top: 10px;"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1018.3819746773321!2d80.63310070117343!3d7.290514529817207!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae366266498acd3%3A0x411a3818a1e03c35!2sKandy!5e0!3m2!1sen!2slk!4v1740501085995!5m2!1sen!2slk"
                     width="100%"
-                    height="300"
-                    style="border:0; border-radius: 10px; margin-top: 10px;"
-                    loading="lazy"
+                    height="200"
                     allowfullscreen
-                    referrerpolicy="no-referrer-when-downgrade"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1018.3819746773321!2d80.63310070117343!3d7.290514529817207!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae366266498acd3%3A0x411a3818a1e03c35!2sKandy!5e0!3m2!1sen!2slk!4v1740501085995!5m2!1sen!2slk" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-                  </iframe>
+                    loading="lazy">
+                </iframe>
+
 
               </div>
             </div>
@@ -133,10 +136,28 @@
                  <script>
                      document.getElementById("year").textContent = new Date().getFullYear();
                  </script>
+                 <script>
+                   function initMap() {
+                     var location = { lat: 7.2905145, lng: 80.6331007 };
+                     var map = new google.maps.Map(document.getElementById("map"), {
+                       zoom: 15,
+                       center: location,
+                       disableDefaultUI: true,
+                       scrollwheel: false,
+                       mapTypeId: "satellite",
+                     });
+                     new google.maps.Marker({ position: location, map: map });
+                   }
+                 </script>
+                 <script async defer
+                   src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+                 </script>
 
             <script src="assets/user/js/main.js"></script>
             <script src="assets/user/js/about.js"></script>
             <script src="assets/user/swiper/swiper-bundle.min.js"></script>
             <script src="assets/user/js/js/bootstrap.bundle.min.js"></script>
+
+
 </body>
 </html>

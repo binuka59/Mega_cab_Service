@@ -31,7 +31,7 @@
 </head>
 <body>
 
-        <%@ include file="driverheader.jsp"%>
+        <%@ include file="header.jsp"%>
                 <div class="container-fluid bg-light  ">
                     <div class="container text-center animated bounceInDown">
                         <h1 class="display">Payment Details</h1>
@@ -44,15 +44,15 @@
                     </div>
                 </div>
                 <%
-                List<Payment> BookingList = (List<Payment>) request.getAttribute("PaymentController");
-                if (BookingList != null && !BookingList.isEmpty()) {
-                    for (Payment payment : BookingList) {
+                List<Payment> paymentList = (List<Payment>) request.getAttribute("PaymentController");
+                if (paymentList != null && !paymentList.isEmpty()) {
+                    for (Payment payment : paymentList) {
                 %>
 
             <div class="top booking">
                 <div class="container-fluid py-6">
 
-                <form action="PaymentController?action=payment&payid=<%= payment.getId() %>" method="post">
+                <form action="PaymentController?action=payied&payiedid=<%= payment.getId() %>" method="post">
 
 
                 <div class="container">
@@ -61,20 +61,20 @@
                              <div class=" col-md-3 form-group mt-3 mt-md-0">
 
                                 <label>Book number :</label>
-                                <input type="text" class="form-control" name="num"  value="MCS00<%= payment.getId() %>" >
+                                <input type="text" class="form-control" name="num"  value="MCS00<%= payment.getId() %>"readonly>
                                 <label ></label>
                              </div>
 
                              <div class="col-md-3 form-group mt-3 mt-md-0">
                                 <label>Allowcated number of  km :</label>
-                                <input type="text" class="form-control" id="estimate" name="estimate" value="<%= payment.getEstimateprice() %> KM" >
+                                <input type="text" class="form-control" id="estimate" name="estimate" value="<%= payment.getEstimateprice() %> KM" readonly>
                                 <div class="validate"></div>
                              </div>
 
 
                              <div class="col-md-6 form-group mt-3 mt-md-0">
                                 <label>Journey:</label>
-                                <input type="text" class="form-control"  value="<%= payment.getPickaddress() %> - <%= payment.getDropadress() %>" >
+                                <input type="text" class="form-control"  value="<%= payment.getPickaddress() %> - <%= payment.getDropadress() %>" readonly>
                                 <div class="validate"></div>
                              </div>
 
@@ -135,7 +135,7 @@
                                 <label>Total Of KM:</label>
                              </div>
                             <div class="col-md-3 form-group mt-3 mt-md-0">
-                                <input type="text" class="form-control" name="totkm" id="totkm" oninput="calculateAmount()">
+                                <input type="text" class="form-control" name="totkm" id="totkm" value="<%= payment.getDestination() %>"readonly>
                                 <div class="validate"></div>
                             </div>
 
@@ -145,61 +145,17 @@
                                 <label>Amount:</label>
                              </div>
                             <div class="col-md-3 form-group mt-3 mt-md-0">
-                                <input type="text" class="form-control" name="amount" id="amount" readonly>
+                                <input type="text" class="form-control" name="amount" id="amount" value="<%= payment.getAmount() %>" readonly>
                                 <div class="validate"></div>
                             </div>
 
                          </div>
                              <div class = "col-lg-6 col-md-6 form-group mt-3 mt-md-0">
-                                <button type="submit" class="bookbtn">Upload</button>
+                                <button type="submit" class="bookbtn">Pay Now</button>
                              </div>
 
                         </form>
-                        <script>
-                            function calculateAmount() {
-                                // Get user input values
-                                let totkm = parseFloat(document.getElementById("totkm").value) || 0;
-                                let additions = document.getElementById("addition").value;
-                                let addition = parseFloat(additions.replace("RS: ", "")) || 0;
-                                let estimate = parseFloat(document.getElementById("estimate").value) || 0;
 
-
-
-
-                                // Get price from the input field (assuming the price format is "RS: 100")
-                                let priceText = document.getElementById("price").value;
-                                let price = parseFloat(priceText.replace("RS: ", "")) || 0;
-
-                                let initials =  document.getElementById("initial").value;
-                                let initial = parseFloat(initials.replace("RS: ", "")) || 0;
-
-                                let fees =  document.getElementById("fee").value;
-                                let fee = parseFloat(fees.replace("RS: ", "")) || 0;
-
-                                let drivers =  document.getElementById("driver").value;
-                                let driver = parseFloat(drivers.replace("RS: ", "")) || 0
-
-                                let esprice = 0;
-                                let amount = 0;
-                                let total=0;
-
-
-                                if (totkm >=estimate) {
-                                    esprice = (totkm - estimate ) * addition;
-                                    amount = ((estimate  * price) + esprice);
-                                } else {
-                                    amount = (totkm * price);
-                                }
-                                ,if (totkm === 0 || isNaN(totkm)) {
-                                    total = 0.0;
-                                } else {
-                                    total= amount+(initial+fee+driver);
-                                }
-
-
-                                document.getElementById("amount").value = "RS: " + total.toFixed(2);
-                            }
-                        </script>
                                <%
                                         }
                                     } else {

@@ -74,6 +74,10 @@ public class Booking {
         this.total= totalKM;
     }
 
+    public Booking(Integer payiedid) {
+        this.id= payiedid;
+    }
+
 
     public int getUserId() {
         return userId;

@@ -2,6 +2,10 @@ package com.megacab.model;
 
 public class Payment {
     private  int id;
+
+
+
+    private  String name;
     private  String email;
     private  Double initialfee;
     private  Double fee;
@@ -15,18 +19,18 @@ public class Payment {
     private  String dropadress;
     private  double balance;
     private  String amount;
+    private  String destination;
+    private  String status;
 
 
 
-    public Payment(String bid,String price, String addition, String estimate, String pickdate, String driver, String pickaddress, String dropaddress) {
+    public Payment(String bid,String amount, String pickdate, String pickaddress, String dropaddress , String status) {
         this.id= Integer.parseInt(bid);
-        this.price=price;
-        this.additionalprice=addition;
-        this.estimateprice=estimate;
+        this.amount=amount;
         this.pickaddress=pickaddress;
         this.date=pickdate;
-        this.driver=driver;
         this.dropadress=dropaddress;
+        this.status=status;
 
     }
 
@@ -44,6 +48,21 @@ public class Payment {
          this.dropadress=dropaddress;
     }
 
+    public Payment(Integer id, String email, Double price, Double additional, String estimation, Double initial, Double fee, Double driver, String pickaddress, String dropaddress, String destination, String amount) {
+        this.id=id;
+        this.email=email;
+        this.price= String.valueOf(price);
+        this.additionalprice= String.valueOf(additional);
+        this.estimateprice= estimation;
+        this.initialfee=initial;
+        this.fee=fee;
+        this.driverfee=driver;
+        this.pickaddress=pickaddress;
+        this.dropadress=dropaddress;
+        this.destination=destination;
+        this.amount=amount;
+    }
+
     public Payment(Double balance, String userId) {
         this.balance=balance;
         this.id= Integer.parseInt(userId);
@@ -58,7 +77,38 @@ public class Payment {
         this.amount= amount;
     }
 
+    public Payment(String bid, String amount, String name,String date,String status) {
+        this.id= Integer.parseInt(bid);
+        this.amount=amount;
+        this.name=name;
+        this.date=date;
+        this.status=status;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
 
     public String getAmount() {
         return amount;

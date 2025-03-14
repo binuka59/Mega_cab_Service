@@ -81,7 +81,7 @@
                                                     <td>
 
                                                         <a href="BookingController?action=cancel&cancelid=<%=booking.getId()%>" class="btn btn-danger">Cancel</a>
-                                                        <a href="PaymentController?action=pay&payid=<%=booking.getId()%>" class="btn btn-primary">Pay</a>
+                                                        <a href="PaymentController?action=payuser&payid=<%=booking.getId()%>" class="btn btn-primary">Pay</a>
                                                     </td>
                                                 </tr>
                                               <%

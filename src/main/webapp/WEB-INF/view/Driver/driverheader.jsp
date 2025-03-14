@@ -116,7 +116,7 @@
                  <ul>
                    <li><a class="nav-link scrollto" href="Login?action=DriverH">Home</a></li>
                    <li><a class="nav-link scrollto" href="DriverController?action=DVehicle">Vehicle</a></li>
-                   <li><a class="nav-link scrollto" href="DriverController?action=DPayment">Payment</a></li>
+                   <li><a class="nav-link scrollto" href="#">Payment</a></li>
 
 
 

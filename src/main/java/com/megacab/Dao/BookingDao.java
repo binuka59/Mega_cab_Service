@@ -153,7 +153,7 @@ public class BookingDao {
 
     public static void updatepaymnet(Booking booking) {
         Integer id = booking.getId();
-        String query = "UPDATE booking SET Destination=? ,status=?  WHERE bid=?";
+        String query = "UPDATE booking SET Destination=?  WHERE bid=?";
 
         try {
 
@@ -161,8 +161,70 @@ public class BookingDao {
             PreparedStatement statement = connection.prepareStatement(query);
 
             statement.setString(1,booking.getTotal());
-            statement.setString(2, "Finish");
-            statement.setInt(3, id);
+            statement.setInt(2, id);
+
+            statement.executeUpdate();
+
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static List<Payment> getuserpaybooking(Integer payid) {
+        List<Payment> BookingList = new ArrayList<>();
+        String query = "SELECT L.email AS email, " +
+                "B.bid AS id, B.pickaddress AS pickaddress, B.dropaddress AS dropaddress, B.Destination AS destination, " +
+                "v.v_price AS price, v.v_addtionalprice AS additional, v.v_estimation AS estimation, " +
+                "vd.initial AS initial, vd.fee AS fee, vd.driver AS driver, " +  // Added comma before p.price
+                "p.price AS amount " +
+                "FROM booking B " +
+                "JOIN vehicle v ON B.vid = v.vehicleid " +
+                "JOIN login L ON B.uid = L.id " +
+                "JOIN vehicledetail vd ON v.details_id = vd.id " +
+                "JOIN payment p ON B.bid = p.bid " +
+                "WHERE B.bid = ?";
+
+
+        try (Connection connection = DbConnectionFactory.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setInt(1, payid);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Integer id =resultSet.getInt("id");
+                String email= resultSet.getString("email");
+                Double price = resultSet.getDouble("price");
+                Double additional = resultSet.getDouble("additional");
+                String estimation = resultSet.getString("estimation");
+                Double initial = resultSet.getDouble("initial");
+                Double fee = resultSet.getDouble("fee");
+                Double driver = resultSet.getDouble("driver");
+                String pickaddress = resultSet.getString("pickaddress");
+                String dropaddress = resultSet.getString("dropaddress");
+                String destination = resultSet.getString("destination");
+                String amount = resultSet.getString("amount");
+                System.out.println("id is"+id);
+                BookingList.add(new Payment(id,email,price,additional,estimation,initial,fee,driver, pickaddress, dropaddress,destination,amount));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return BookingList;
+    }
+
+    public static void updatepaymnetdetail(Booking booking) {
+        Integer id = booking.getId();
+        String query = "UPDATE booking SET status=?  WHERE bid=?";
+
+        try {
+
+            Connection connection = DbConnectionFactory.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setString(1,"Finish");
+            statement.setInt(2, id);
 
             statement.executeUpdate();
 
@@ -245,10 +307,12 @@ public class BookingDao {
         List<AdminBook> BookSelect = new ArrayList<>();
         String query = "SELECT L.Name AS name, L.email AS email, L.mobile AS mobile, L.nic AS nic, " +
                 "v.v_name AS vehicle, v.v_price AS price, v.v_estimation AS estimate,v.v_addtionalprice AS additional," +
+                "vd.initial AS initial, vd.fee AS fee," +
                 "B.bid AS id ,B.driver AS driver, B.pickaddress AS pickaddress, B.dropaddress AS dropaddress, B.picktime AS picktime, " +
                 "B.pickdate AS pickdate " +
                 "FROM booking B " +
                 "JOIN vehicle v ON B.vid = v.vehicleid " +
+                "JOIN vehicledetail vd ON v.details_id = vd.id " +
                 "JOIN login L ON B.uid = L.id " +
                 "WHERE B.bid = ?";
 
@@ -269,12 +333,14 @@ public class BookingDao {
                     String price = resultSet.getString("price");
                     String estimate = resultSet.getString("estimate");
                     String additional = resultSet.getString("additional");
+                    Double initial = resultSet.getDouble("initial");
+                    Double fee = resultSet.getDouble("fee");
                     String time = resultSet.getString("picktime");
                     String date = resultSet.getString("pickdate");
                     String pickaddress = resultSet.getString("pickaddress");
                     String dropaddress = resultSet.getString("dropaddress");
 
-                    BookSelect.add(new AdminBook(id,name, email, mobile, nic, driver,vehicletype, price, estimate,additional, time, date, pickaddress, dropaddress));
+                    BookSelect.add(new AdminBook(id,name, email, mobile, nic, driver,vehicletype, price,initial,fee, estimate,additional, time, date, pickaddress, dropaddress));
                 }
             }
         } catch (SQLException e) {

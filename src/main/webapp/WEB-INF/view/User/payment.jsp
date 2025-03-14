@@ -51,36 +51,18 @@
                         <div class="detail-box">
                             <h3>MCS00<%=payment.getId()%></h3>
                           <h6>
-                            <span>Booking Number : </span> MCS00<%=payment.getId()%>
+                            <span><%=payment.getStatus()%></span>
                           </h6>
                           <h6>
-                            <span>Payment of 1KM </span><%=payment.getPrice()%>
+                            <span><%=payment.getDate()%></span>
                           </h6>
                           <h6>
-                            <span>Distence: </span><%=payment.getEstimateprice()%>
+                            <span><%=payment.getPickaddress()%> - <%=payment.getDropadress()%> </span>
                           </h6>
-                            <%
-                                String esti = payment.getEstimateprice();
-                                if (esti.compareTo("150KM") >= 0) {  // Lexicographical comparison
-                            %>
-                                <h6>
-                                    <span>Vehicle Type: </span> <%= payment.getEstimateprice() %>
-                                </h6>
-                            <%
-                                }
-                            %>
-
 
                           <h6>
-                            <span>Journey: </span><%=payment.getPickaddress()%> - <%=payment.getDropadress()%>
+                            <span><%=payment.getAmount()%></span>
                           </h6>
-                          <h6>
-                            <span> Fee: </span> <%=payment.getPrice()%>
-                          </h6>
-                          <h6>
-                            <span> Destination: </span><%=payment.getPrice()%>
-                          </h6>
-
 
                         </div>
 
@@ -207,7 +189,7 @@
             <script src="assets/user/js/main.js"></script>
             <script src="assets/user/js/about.js"></script>
             <script src="assets/user/js/about.js"></script>
-
+            <script src="assets/user/js/js/bootstrap.bundle.min.js"></script>
 
 
 

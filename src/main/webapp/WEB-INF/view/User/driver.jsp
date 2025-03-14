@@ -170,5 +170,6 @@
             <script src="assets/user/js/main.js"></script>
             <script src="assets/user/js/about.js"></script>
             <script src="assets/user/swiper/swiper-bundle.min.js"></script>
+            <script src="assets/user/js/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

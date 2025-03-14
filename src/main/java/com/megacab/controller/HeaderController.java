@@ -1,8 +1,10 @@
 package com.megacab.controller;
 
 import com.megacab.model.Header;
+import com.megacab.model.Login;
 import com.megacab.model.Vehicle;
 import com.megacab.service.HeaderService;
+import com.megacab.service.LoginService;
 import com.megacab.service.VehicleService;
 
 import java.io.IOException;
@@ -47,8 +49,10 @@ public class HeaderController extends HttpServlet {
 		if (userId != null) {
 			request.setAttribute("userId", userId);
 		}
-		System.out.println(userId);
-
+//		System.out.println(userId);
+		List<Login> NotifyList = new ArrayList<>();
+		NotifyList = LoginService.getAdminDetails();
+		request.setAttribute("HeaderController",NotifyList);
 
 	}
 	/**
