@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 
+
 /**
  * Servlet implementation class RegisterController
  */
@@ -64,6 +65,7 @@ class RegisterController extends HttpServlet {
 		String name = request.getParameter("name");
 		String password = request.getParameter("password");
 		String email = request.getParameter("email");
+		
 
 		String Query = "SELECT email  FROM login";
 

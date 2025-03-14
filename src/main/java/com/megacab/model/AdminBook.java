@@ -12,11 +12,31 @@ public class AdminBook {
     private  String estimate;
     private  String additional;
     private  String  status;
+    private  Double fee;
+    private  Double initialfee;
+
+    public Double getFee() {
+        return fee;
+    }
+
+    public void setFee(Double fee) {
+        this.fee = fee;
+    }
+
+    public Double getInitialfee() {
+        return initialfee;
+    }
+
+    public void setInitialfee(Double initialfee) {
+        this.initialfee = initialfee;
+    }
 
 
 
 
-    public AdminBook(Integer id,String name, String email, String mobile, String nic, String driver ,String vehicletype, String price, String estimate,String additional, String time, String date, String pickaddress, String dropaddress) {
+
+
+    public AdminBook(Integer id,String name, String email, String mobile, String nic, String driver ,String vehicletype, String price, Double initial, Double fee, String estimate,String additional, String time, String date, String pickaddress, String dropaddress) {
         this.id=id;
         this.name=name;
         this.email=email;
@@ -24,6 +44,8 @@ public class AdminBook {
         this.nic=nic;
         this.driver=driver;
         this.price= Double.valueOf(price);
+        this.initialfee=initial;
+        this.fee=fee;
         this.estimate=estimate;
         this.additional=additional;
         this.vehicletype=vehicletype;

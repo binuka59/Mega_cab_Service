@@ -52,7 +52,7 @@
             <div class="top booking">
                 <div class="container-fluid py-6">
 
-                <form action="DriverController?action=update&id=<%= adminbook.getId() %>" method="post" enctype="multipart/form-data">
+                <form action="PaymentController?action=updatepayment&upid=<%= adminbook.getId() %>" method="post" >
 
 
                 <div class="container">
@@ -61,12 +61,12 @@
                              <div class=" col-md-3 form-group mt-3 mt-md-0">
 
                                 <label>Book number :</label>
-                                <input type="email" class="form-control" name="email"  value="MCS00<%= adminbook.getId() %>" >
+                                <input type="text" class="form-control" name="id"  value="MCS00<%= adminbook.getId() %>" >
                                 <label ></label>
                              </div>
                              <div class="col-md-3 form-group mt-3 mt-md-0">
                                 <label>Customer Name:</label>
-                                <input type="email" class="form-control" name="email"  value="<%= adminbook.getName() %>" >
+                                <input type="name" class="form-control" name="name"  value="<%= adminbook.getName() %>" >
 
                              </div>
 
@@ -124,6 +124,11 @@
                                 <input type="text" class="form-control"  value="<%= adminbook.getPicktime() %>" >
                                 <div class="validate"></div>
                              </div>
+
+                         <% String drive = adminbook.getDriver();
+                         if(drive.equals("without")){%>
+
+
                              <div class="col-md-7 form-group mt-3 mt-md-0">
 
                              </div>
@@ -139,18 +144,39 @@
                             </div>
 
                              <div class="col-md-5 form-group mt-3 mt-md-0">
-
                              </div>
 
                              <div class="col-md-4 form-group mt-3 mt-md-0">
                                 <label>Additional <%= adminbook.getEstimate() %> per 1km charge:</label>
 
                              </div>
-
                             <div class="col-md-3 form-group mt-3 mt-md-0">
                                 <input type="text" class="form-control" name="addition" id="addition" value="RS: <%= adminbook.getAdditional() %>0" readonly>
                                 <div class="validate"></div>
                             </div>
+
+                            <div class="col-md-7 form-group mt-3 mt-md-0">
+                             </div>
+                             <div class="col-md-2 form-group mt-3 mt-md-0">
+                                <label>Initial fee</label>
+                             </div>
+                            <div class="col-md-3 form-group mt-3 mt-md-0">
+                                <input type="text" class="form-control" name="initial" id="initial" value="RS: <%= adminbook.getInitialfee()%>0" readonly>
+                                <div class="validate"></div>
+                            </div>
+
+                            <div class="col-md-7 form-group mt-3 mt-md-0">
+                             </div>
+                             <div class="col-md-2 form-group mt-3 mt-md-0">
+                                <label> Booking fee</label>
+                             </div>
+                            <div class="col-md-3 form-group mt-3 mt-md-0">
+                                <input type="text" class="form-control" name="fee" id="fee" value="RS: <%= adminbook.getFee() %>0" readonly>
+                                <div class="validate"></div>
+                            </div>
+
+
+
 
                              <div class="col-md-7 form-group mt-3 mt-md-0">
 
@@ -180,10 +206,13 @@
                                 <div class="validate"></div>
                             </div>
 
-                         </div>
                              <div class = "col-lg-6 col-md-6 form-group mt-3 mt-md-0">
                                 <button type="submit" class="bookbtn">Update Now</button>
                              </div>
+                         <%}
+                          %>
+                         </div>
+
 
                         </form>
                         <script>
@@ -198,18 +227,29 @@
                                 let priceText = document.getElementById("price").value;
                                 let price = parseFloat(priceText.replace("RS: ", "")) || 0;
 
+                                let initials =  document.getElementById("initial").value;
+                                let initial = parseFloat(initials.replace("RS: ", "")) || 0;
+
+                                let fees =  document.getElementById("fee").value;
+                                let fee = parseFloat(fees.replace("RS: ", "")) || 0;
+
                                 let esprice = 0;
                                 let amount = 0;
+                                let total = 0;
 
                                 if (totkm >=estimate) {
                                     esprice = (totkm - estimate ) * addition;
-                                    amount = ((estimate  * price) + esprice)*2;
+                                    amount = ((estimate  * price) + esprice);
                                 } else {
-                                    amount = (totkm * price)*2;
+
+                                    amount = (totkm * price);
                                 }
-
-
-                                document.getElementById("amount").value = "RS: " + amount.toFixed(2);
+                                if (totkm === 0 || isNaN(totkm)) {
+                                    total = 0.0;
+                                } else {
+                                    total = amount + initial + fee;
+                                }
+                                document.getElementById("amount").value = "RS: " + total.toFixed(2);
                             }
                         </script>
                                <%

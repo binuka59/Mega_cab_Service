@@ -85,7 +85,7 @@
 
               <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                 <li class="dropdown-header">
-                  <h6><%= userName %><%= userId %></h6>
+                  <h6><%= userName %></h6>
                 </li>
 
                 <li>

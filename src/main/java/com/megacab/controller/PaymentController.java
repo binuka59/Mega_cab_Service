@@ -45,7 +45,7 @@ public class PaymentController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action =request.getParameter("action");
-		if (action.equals("pay"))
+		if (action.equals("payuser"))
 		{
 
 			pay(request , response);
@@ -73,6 +73,14 @@ public class PaymentController extends HttpServlet {
 		{
 			successpay(request,response);
 		}
+		else if (action.equals("payied"))
+		{
+			completepay(request,response);
+		}
+		else if (action.equals("updatepayment"))
+		{
+			withoutpay(request,response);
+		}
 
 	}
 	private void pay(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -90,7 +98,13 @@ public class PaymentController extends HttpServlet {
 					request.getRequestDispatcher("/Login?action=booking").forward(request, response);
 				}else
 				{
-					request.getRequestDispatcher("/Login?action=booking").forward(request, response);
+
+					BookingDao bookingDao = new BookingDao();
+
+					List<Payment> paymentList = BookingDao.getuserpaybooking(Integer.valueOf(payid));
+					request.setAttribute("PaymentController", paymentList);
+
+					request.getRequestDispatcher("WEB-INF/view/User/Paymentsheet.jsp").forward(request, response);
 				}
 
 			}
@@ -123,5 +137,36 @@ public class PaymentController extends HttpServlet {
 		response.sendRedirect(request.getContextPath() + "/Login?action=DriverH");
 
 	}
+
+	private void completepay(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Integer payiedid = Integer.valueOf(request.getParameter("payiedid"));
+
+		Booking booking =new Booking(payiedid);
+		BookingDao.updatepaymnetdetail(booking);
+
+
+		PaymentDao.updatepaymentdetails(payiedid);
+
+		request.setAttribute("errorMessage", "Payment Successfully.");
+		response.sendRedirect(request.getContextPath() + "/Login?action=payment");
+
+	}
+
+	private void withoutpay(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Integer payid = Integer.valueOf(request.getParameter("upid"));
+		String totalKM = request.getParameter("totkm");
+		System.out.println("totl"+totalKM);
+		Booking booking =new Booking(payid,totalKM);
+
+		BookingDao.updatepaymnet(booking);
+		String amount = request.getParameter("amount");
+		Payment payment=new Payment(payid,amount);
+		PaymentDao.updatepayment(payment);
+		//		request.setAttribute("errorMessage", "Payment Successfully.");
+		response.sendRedirect(request.getContextPath() + "/AdminController?action=admin");
+
+	}
+
+
 
 }

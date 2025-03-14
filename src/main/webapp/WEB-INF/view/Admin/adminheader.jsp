@@ -62,7 +62,13 @@
                     Integer userId = (Integer) session.getAttribute("userId");
 
                 %>
+                    <%
 
+                        if (userName == null) {
+                            response.sendRedirect("Login?action=logout");
+                            return;
+                        }
+                    %>
 
 
 
@@ -112,7 +118,7 @@
                    <li><a class="nav-link scrollto" href="AdminController?action=vehicle">Vehicle</a></li>
                    <li><a class="nav-link scrollto" href="AdminController?action=driver">Driver</a></li>
                    <li><a class="nav-link scrollto" href="AdminController?action=book">Booking</a></li>
-                   <li><a class="nav-link scrollto" href="AdminController?action=adminview">Admin</a></li>
+                   <!-- <li><a class="nav-link scrollto" href="AdminController?action=adminview">Admin</a></li>-->
                    <li><a class="nav-link scrollto" href="AdminController?action=pay">Payment</a></li>
 
 

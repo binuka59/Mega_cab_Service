@@ -75,7 +75,7 @@ public class PaymentDao {
         Integer id = payment.getId();
         LocalDate today = LocalDate.now();
         Date sqlDate = Date.valueOf(today);
-        String query = "UPDATE payment SET price=? ,date=? ,status=?  WHERE bid=?";
+        String query = "UPDATE payment SET price=? ,date=?   WHERE bid=?";
 
         try {
 
@@ -84,8 +84,8 @@ public class PaymentDao {
 
             statement.setString(1,payment.getAmount());
             statement.setDate(2, sqlDate);
-            statement.setString(3, "Pay");
-            statement.setInt(4, id);
+//            statement.setString(3, "Pay");
+            statement.setInt(3, id);
 
             statement.executeUpdate();
 
@@ -95,15 +95,75 @@ public class PaymentDao {
         }
     }
 
+    public static void updatepaymentdetails(Integer payiedid) {
+
+        String query = "UPDATE payment SET status=?   WHERE bid=?";
+
+        try {
+
+            Connection connection = DbConnectionFactory.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setString(1,"Pay");
+            statement.setInt(2, payiedid);
+
+            statement.executeUpdate();
+
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public static List<Payment> getAlladminpayment() {
+        List<Payment> paymentList  = new ArrayList<>();
+        String query = "SELECT p.price AS amount,p.date AS date,p.status AS status, " +
+                "l.Name AS name, " +
+                "B.bid AS bid " +
+                "FROM booking B " +
+                "JOIN payment p ON B.bid = p.bid " +
+                "JOIN login l ON B.uid = l.id " +
+                "AND B.status = ? ";
+        try (Connection connection = DbConnectionFactory.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, "Finish");
+
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String amount = resultSet.getString("amount");
+                String bid = resultSet.getString("bid");
+                String name = resultSet.getString("name");
+                String date = resultSet.getString("date");
+                String status =resultSet.getString("status");
+
+
+                paymentList.add(new Payment(bid,amount,name,date,status));
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error fetching payment details: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return paymentList;
+
+    }
+
     public List<Payment> getmypayment(Integer userId) {
         List<Payment> paymentList  = new ArrayList<>();
 
-        String query = "SELECT v.v_price AS price, v.v_addtionalprice AS addition, v.v_estimation AS estimate, " +
-                "B.bid AS bid, B.pickaddress AS pickaddress, B.dropaddress AS dropaddress, B.pickdate AS pickdate, B.driver AS driver " +
+        String query = "SELECT p.price AS amount, " +
+                "B.bid AS bid, B.pickaddress AS pickaddress, B.dropaddress AS dropaddress, B.pickdate AS pickdate " +
                 "FROM booking B " +
-                "JOIN vehicle v ON B.vid = v.vehicleid " +
-                "JOIN login L ON B.uid = L.id " +
-                "WHERE B.uid = ?";
+                "JOIN payment p ON B.bid = p.bid " +
+                "WHERE B.uid = ? AND B.status = ? AND p.status = ? ";
+
+
+
 
 
         if (userId == null) {
@@ -114,23 +174,21 @@ public class PaymentDao {
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setInt(1, userId);
+            preparedStatement.setString(2, "Finish");
+            preparedStatement.setString(3, "Pay");
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                String price = resultSet.getString("price");
+                String amount = resultSet.getString("amount");
                 String bid = resultSet.getString("bid");
-                String addition = resultSet.getString("addition");
-                String estimate = resultSet.getString("estimate");
                 String pickaddress = resultSet.getString("pickaddress");
                 String dropaddress = resultSet.getString("dropaddress");
-
+                String status="Pay";
                 Date pickdateObj = resultSet.getDate("pickdate");
                 String pickdate = (pickdateObj != null) ? pickdateObj.toString() : "N/A"; // Handle null dates
 
-                String driver = resultSet.getString("driver");
-
-                paymentList.add(new Payment(bid, price, addition, estimate, pickdate, driver, pickaddress, dropaddress));
+                paymentList.add(new Payment(bid,amount,pickdate, pickaddress, dropaddress,status));
             }
 
         } catch (SQLException e) {

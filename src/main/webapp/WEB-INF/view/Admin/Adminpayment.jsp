@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
         <%@ page import="java.util.List" %>
-        <%@ page import="com.megacab.model.AdminBook" %>
+        <%@ page import="com.megacab.model.Payment" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,7 +34,7 @@
         <%@ include file="adminheader.jsp"%>
                 <div class="container-fluid bg-light  ">
                     <div class="container text-center animated bounceInDown">
-                        <h1 class="display">Booking Details</h1>
+                        <h1 class="display">Payment Details</h1>
                         <h1 class="message">
                               <% if (request.getAttribute("Message") != null) { %>
                                   <%= request.getAttribute("Message") %>
@@ -43,181 +43,57 @@
 
                     </div>
                 </div>
-                <%
-                List<AdminBook> BookSelect = (List<AdminBook>) request.getAttribute("AdminController");
-                if (BookSelect != null && !BookSelect.isEmpty()) {
-                    for (AdminBook adminbook : BookSelect) {
-                %>
+                <section class="ftco-section">
+                        <div class="container">
+                            <h1 class="display">All payment</h1>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-wrap">
+                                        <table class="table table-responsive-xl">
+                                          <thead>
+                                            <tr>
 
-            <div class="top booking">
-                <div class="container-fluid py-6">
+                                              <th>Book number</th>
+                                              <th>customer name</th>
+                                              <th>Payment</th>
+                                              <th>Payment Date</th>
+                                              <th>Status</th>
+                                            </tr>
+                                          </thead>
+                                            <tbody>
+                                                <%
+                                                    List<Payment> PaymentList = (List<Payment>) request.getAttribute("AdminController");
 
-                <form action="DriverController?action=update&id=<%= adminbook.getId() %>" method="post" enctype="multipart/form-data">
+                                                    if (PaymentList != null && !PaymentList.isEmpty()) {
+                                                        for (Payment payment : PaymentList) {
+                                                %>
+                                                    <tr class="alert" role="alert">
 
+                                                        <td >MCS00<%= payment.getId() %></td>
+                                                        <td><%= payment.getName() %></td>
+                                                        <td><%= payment.getAmount() %></td>
+                                                        <td><%= payment.getDate()%></span></td>
+                                                         <td style="font-weight:bold;"><%= payment.getStatus()%></span></td>
 
-                <div class="container">
-                         <div class="row">
+                                                    </tr>
+                                                <%
+                                                        }
+                                                    } else {
+                                                %>
+                                                    <tr>
+                                                        <td colspan="4" style="text-align: center; font-weight: bold; font-size: 18px;">No Any Booking display.</td>
+                                                    </tr>
+                                                <%
+                                                    }
+                                                %>
+                                            </tbody>
 
-                             <div class=" col-md-3 form-group mt-3 mt-md-0">
-
-                                <label>Book number :</label>
-                                <input type="email" class="form-control" name="email"  value="MCS00<%= adminbook.getId() %>" >
-                                <label ></label>
-                             </div>
-                             <div class="col-md-3 form-group mt-3 mt-md-0">
-                                <label>Customer Name:</label>
-                                <input type="email" class="form-control" name="email"  value="<%= adminbook.getName() %>" >
-
-                             </div>
-
-                             <div class="col-md-3 form-group mt-3 mt-md-0">
-                                <label>Mobile Number:</label>
-                                <input type="number" class="form-control" name="mobile" value="<%= adminbook.getMobile() %>">
-                                <div class="validate"></div>
-                             </div>
-
-                             <div class="col-md-3 form-group mt-3 mt-md-0">
-                                <label>N.I.C. Number:</label>
-                                <input type="text" class="form-control" name="nic" value="<%= adminbook.getNic() %>">
-                                <div class="validate"></div>
-                             </div>
-
-                             <div class="col-md-4 form-group mt-3 mt-md-0">
-                                <label>E-mail Address:</label>
-                                <input type="text" class="form-control" value="<%= adminbook.getEmail() %>">
-                                <div class="validate"></div>
-                             </div>
-
-                             <div class="col-md-4 form-group mt-3 mt-md-0">
-                                <label>Vehicle:</label>
-                                <input type="text" class="form-control"  value="<%= adminbook.getVehicletype() %>" >
-                                <div class="validate"></div>
-                             </div>
-
-                             <div class="col-md-4 form-group mt-3 mt-md-0">
-                                <label>Allowcated number of  km :</label>
-                                <input type="text" class="form-control" id="estimate" name="estimate" value="<%= adminbook.getEstimate() %>" >
-                                <div class="validate"></div>
-                             </div>
-
-                             <div class="col-md-3 form-group mt-3 mt-md-0">
-                                <label>Date:</label>
-                                <input type="text" class="form-control"  value="<%= adminbook.getPickupdate() %>" >
-                                <div class="validate"></div>
-                             </div>
-
-
-                             <div class="col-md-6 form-group mt-3 mt-md-0">
-                                <label>Journey:</label>
-                                <input type="text" class="form-control"  value="<%= adminbook.getPickaddress() %> - <%= adminbook.getDropaddress() %>" >
-                                <div class="validate"></div>
-                             </div>
-
-                             <div class="col-md-3 form-group mt-3 mt-md-0">
-                                <label>Time:</label>
-                                <input type="text" class="form-control"  value="<%= adminbook.getPicktime() %>" >
-                                <div class="validate"></div>
-                             </div>
-                             <div class="col-md-7 form-group mt-3 mt-md-0">
-
-                             </div>
-
-                             <div class="col-md-2 form-group mt-3 mt-md-0">
-                                <label>Fee of 1KM</label>
-
-                             </div>
-
-                            <div class="col-md-3 form-group mt-3 mt-md-0">
-                                <input type="text" class="form-control" name="price" id="price" value="RS: <%= adminbook.getPrice() %>0" readonly>
-                                <div class="validate"></div>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
-
-                             <div class="col-md-5 form-group mt-3 mt-md-0">
-
-                             </div>
-
-                             <div class="col-md-4 form-group mt-3 mt-md-0">
-                                <label>Additional <%= adminbook.getEstimate() %> per 1km charge:</label>
-
-                             </div>
-
-                            <div class="col-md-3 form-group mt-3 mt-md-0">
-                                <input type="text" class="form-control" name="addition" id="addition" value="RS: <%= adminbook.getAdditional() %>0" readonly>
-                                <div class="validate"></div>
-                            </div>
-
-                             <div class="col-md-7 form-group mt-3 mt-md-0">
-
-                             </div>
-
-                             <div class="col-md-2 form-group mt-3 mt-md-0">
-                                <label>Total Of KM:</label>
-
-                             </div>
-
-                            <div class="col-md-3 form-group mt-3 mt-md-0">
-                                <input type="text" class="form-control" name="totkm" id="totkm" oninput="calculateAmount()">
-                                <div class="validate"></div>
-                            </div>
-
-                             <div class="col-md-7 form-group mt-3 mt-md-0">
-
-                             </div>
-
-                             <div class="col-md-2 form-group mt-3 mt-md-0">
-                                <label>Amount:</label>
-
-                             </div>
-
-                            <div class="col-md-3 form-group mt-3 mt-md-0">
-                                <input type="text" class="form-control" name="amount" id="amount" readonly>
-                                <div class="validate"></div>
-                            </div>
-
-                         </div>
-                             <div class = "col-lg-6 col-md-6 form-group mt-3 mt-md-0">
-                                <button type="submit" class="bookbtn">Update Now</button>
-                             </div>
-
-                        </form>
-                        <script>
-                            function calculateAmount() {
-                                // Get user input values
-                                let totkm = parseFloat(document.getElementById("totkm").value) || 0;
-                                let additions = document.getElementById("addition").value;
-                                let addition = parseFloat(additions.replace("RS: ", "")) || 0;
-                                let estimate = parseFloat(document.getElementById("estimate").value) || 0;
-
-                                // Get price from the input field (assuming the price format is "RS: 100")
-                                let priceText = document.getElementById("price").value;
-                                let price = parseFloat(priceText.replace("RS: ", "")) || 0;
-
-                                let esprice = 0;
-                                let amount = 0;
-
-                                if (totkm >=estimate) {
-                                    esprice = (totkm - estimate ) * addition;
-                                    amount = ((estimate  * price) + esprice)*2;
-                                } else {
-                                    amount = (totkm * price)*2;
-                                }
-
-
-                                document.getElementById("amount").value = "RS: " + amount.toFixed(2);
-                            }
-                        </script>
-                               <%
-                                        }
-                                    } else {
-                                %>
-
-                                <%
-                                    }
-                                %>
-                    </div>
-                </div>
-             </div>
-
+                        </div>
+                    </section>
 
     <section  class="banner section dark-background">
 

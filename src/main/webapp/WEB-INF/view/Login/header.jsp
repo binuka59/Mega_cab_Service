@@ -25,8 +25,9 @@
                         <div class="col-md-6 text-center text-lg-left order-lg-1">
                             <p class="mb-0 d-inline-flex">
                                 <p>Contact us :</p>
-                              <a class="h5" href="tel:+0812392013" target="_blank"><i class="fa fa-phone-alt fa-1x"></i> 081-7 776 666</a>
-                              <a class="h5" href="mailto:cgu@pdn.ac.lk" target="_blank"><i class="fa fa-envelope text-red"></i> Megacab@gmail.com</a>
+
+                              <a class="h5" href="#" target="_blank"><i class="fa fa-phone-alt fa-1x"></i> 081-7 776 666</a>
+                              <a class="h5" href="#" target="_blank"><i class="fa fa-envelope text-red"></i> Megacab@gmail.com</a>
                             </p>
                         </div>
                         <!-- ---------------------------------------------------------------------------------------------------------------->
@@ -64,27 +65,25 @@
               </div>
               <form action="" class="shopping-cart">
                 <h4>Address</h4>
-                <p> <i class="fas fa-map"></i> Career Guidence Unit,<br>
-                        WUS Building,<br>
-                        University of Peradeniya.
+                <p> <i class="fas fa-map"></i> Peradeniya Road,<br>
+
+                        Kandy.
                 </p>
 
                 <h4>Location</h4>
-                <span> <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.839746825377!2d80.59634884526537!3d7.259072183872943!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae369e5c8f17e51%3A0x3acfff3f21ee50b4!2sCareer%20Guidance%20Unit!5e0!3m2!1sen!2slk!4v1632981091780!5m2!1sen!2slk" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                <span> <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1018.3819746773321!2d80.63310070117343!3d7.290514529817207!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae366266498acd3%3A0x411a3818a1e03c35!2sKandy!5e0!3m2!1sen!2slk!4v1740501085995!5m2!1sen!2slk" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                 </span>
 
               </form>
 
               <form action="" class="login-form">
                 <h3>About Us</h3>
-                <h4>-- Introduction --</h4>
-                <p>This is the project our 2nd year 1st semester group project. We are doing a project about online vegetable shopping (web based project). Recently a few years ago the corona situation the farmers cant sell the products to market. Still same problems  this time country faces so many economical problems  so the farmers cant sell the product. The vegetables cant reaching the whole shale market.
-                  So we are considering that problems and we will produce a new solutions about that problems.</p>
+
                   <h4>-- Vision --</h4>
-                      <p>Career guidance and counselling enable the individual to make the best career decisions that reach global standards and to strengthen the national economy.</p>
+                      <p> provide safe, reliable, and efficient transportation that enhances customer convenience and satisfaction.</p>
 
                     <h4>-- Mission --</h4>
-                      <p>Guide students to realize their competencies and train them to plan the appropriate steps to make educational, training, and career choices and develop essential skills that will lead to personal, educational, economic, and social advancement for the individual, family, society, and the nation</p>
+                      <p> our cab service is to provide safe, reliable, and affordable transportation solutions to customers while ensuring convenience, comfort, and efficiency. We strive to enhance the travel experience by leveraging technology-driven booking systems, well-maintained vehicles, and professional, courteous drivers.</p>
 
             </form>
           </div>

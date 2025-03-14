@@ -102,6 +102,9 @@ public class AdminController extends HttpServlet {
 		}
 		else if (action.equals("pay"))
 		{
+			List<Payment> PaymentList = new ArrayList<>();
+			PaymentList = PaymentDao.getAlladminpayment();
+			request.setAttribute("AdminController", PaymentList);
 			request.getRequestDispatcher("WEB-INF/view/Admin/Adminpayment.jsp").forward(request , response);
 		}
 		else if (action.equals("adminview"))

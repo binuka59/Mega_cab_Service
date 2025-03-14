@@ -134,75 +134,7 @@
             </div>
 
 
-       <div class="container py-5 wow fadeInUp" data-wow-delay="0.1s">
-           <div class="container">
-               <div class="text-center">
 
-                   <h1 class="rules-heading py-5">Happy Customers</h1>
-               </div>
-
-               <!-- Swiper Container -->
-               <div class="swipers mySwiper">
-                   <div class="swiper-wrapper ">
-                       <div class="swiper-slide   border rounded p-4" >
-
-
-                           <div class="d-flex align-items-center">
-                               <img class="img-fluid flex-shrink-0 rounded-circle" src="assets/user/img/car.png" style="width: 50px; height: 50px;">
-                               <div class="ps-3">
-                                   <h5 class="mb-1">Client Name</h5>
-                                   <small>Profession</small>
-                               </div>
-                           </div>
-                           <p>Dolor et eos labore, stet justo sed est sed. Diam sed sed dolor stet amet eirmod eos labore diam</p>
-       <center>
-                           <i class="fa fa-star fa-2x text-warning mb-3" aria-hidden="true"></i>
-                           <i class="fa fa-star fa-2x text-warning mb-3" aria-hidden="true"></i>
-                           <i class="fa fa-star fa-2x text-warning mb-3" aria-hidden="true"></i>
-                           <i class="fa fa-star fa-2x text-warning mb-3" aria-hidden="true"></i>
-                           <i class="fa fa-star fa-2x text-warning mb-3" aria-hidden="true"></i>
-                           </center>
-                       </div>
-
-                       <div class="swiper-slide   border rounded p-4">
-                           <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
-                           <p>Dolor et eos labore, stet justo sed est sed. Diam sed sed dolor stet amet eirmod eos labore diam</p>
-                           <div class="d-flex align-items-center">
-                               <img class="img-fluid flex-shrink-0 rounded-circle" src="img/testimonial-2.jpg" style="width: 50px; height: 50px;">
-                               <div class="ps-3">
-                                   <h5 class="mb-1">Client Name</h5>
-                                   <small>Profession</small>
-                               </div>
-                           </div>
-                       </div>
-
-                       <div class="swiper-slide   border rounded p-4">
-                           <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
-                           <p>Dolor et eos labore, stet justo sed est sed. Diam sed sed dolor stet amet eirmod eos labore diam</p>
-                           <div class="d-flex align-items-center">
-                               <img class="img-fluid flex-shrink-0 rounded-circle" src="img/testimonial-3.jpg" style="width: 50px; height: 50px;">
-                               <div class="ps-3">
-                                   <h5 class="mb-1">Client Name</h5>
-                                   <small>Profession</small>
-                               </div>
-                           </div>
-                       </div>
-
-                       <div class="swiper-slide   border rounded p-4">
-                           <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
-                           <p>Dolor et eos labore, stet justo sed est sed. Diam sed sed dolor stet amet eirmod eos labore diam</p>
-                           <div class="d-flex align-items-center">
-                               <img class="img-fluid flex-shrink-0 rounded-circle" src="img/testimonial-4.jpg" style="width: 50px; height: 50px;">
-                               <div class="ps-3">
-                                   <h5 class="mb-1">Client Name</h5>
-                                   <small>Profession</small>
-                               </div>
-                           </div>
-                       </div>
-                   </div>
-               </div>
-           </div>
-       </div>
 
         <section class="service layout_padding-bottom">
 
